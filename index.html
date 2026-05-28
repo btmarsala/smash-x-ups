@@ -2330,7 +2330,7 @@
       document.getElementById('btn-results-share').onclick = () => {
         const starText = "⭐".repeat(results.stars) + "▪️".repeat(3 - results.stars);
         const dayDiff = Math.floor((new Date(results.date) - new Date("2026-05-27")) / 86400000) + 1;
-        const shareText = `🧩 SmashXUps • Day ${dayDiff} 🧩\nConnector: [${state.activePuzzle.connector}]\nRating: ${starText} (${results.stars}/3 Stars)\nTime: ${formatTime(results.timeTaken)}\n\nPlay here: https://smashxups.com 💜`;
+        const shareText = `🧩 SmashXUps • Day ${dayDiff} 🧩\nConnector: [${state.activePuzzle.connector}]\nRating: ${starText} (${results.stars}/3 Stars)\nTime: ${formatTime(results.timeTaken)}\n\nPlay here: https://smashupsgame.com 💜`;
         
         navigator.clipboard.writeText(shareText).then(() => {
           const shareBtn = document.getElementById('btn-results-share');
