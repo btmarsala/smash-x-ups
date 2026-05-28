@@ -633,6 +633,30 @@
       display: inline-block;
     }
 
+    .btn-secondary {
+      background: transparent;
+      border: 1.5px solid var(--card-border) !important;
+      color: var(--text-main) !important;
+      box-shadow: none !important;
+    }
+    .btn-secondary:hover {
+      background: #f1f5f9 !important;
+    }
+    [data-theme="dark"] .btn-secondary:hover {
+      background: #1e293b !important;
+    }
+
+    #modal-confirm-reveal {
+      margin: 16px auto auto auto;
+    }
+    #modal-confirm-reveal[open] .modal-content {
+      animation: confirmSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes confirmSlideDown {
+      0% { transform: translateY(-40px) scale(0.95); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
     /* Standard Modal Styles (using native HTML5 <dialog>) */
     dialog {
       border: none;
@@ -1366,6 +1390,23 @@
 
 
 
+      </div>
+    </div>
+  </dialog>
+
+  <!-- NATIVE MODAL 3: CONFIRM REVEAL ANSWER -->
+  <dialog id="modal-confirm-reveal">
+    <div class="modal-content" style="border-top: 4px solid var(--primary-accent);">
+      <div class="modal-header" style="justify-content: center; position: relative;">
+        <h2 class="modal-title" style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.05em; text-align: center; width: 100%; text-transform: uppercase;">REVEAL ANSWER</h2>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px; text-align: center;">
+        <p style="font-size: 1.0rem; line-height: 1.5; color: var(--text-main); margin: 0;">Are you sure you want to reveal the answer? This gives 0 stars for today.</p>
+        
+        <div style="display: flex; gap: 12px; margin-top: 8px; width: 100%;">
+          <button class="btn btn-secondary" onclick="document.getElementById('modal-confirm-reveal').close();" style="flex: 1; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; padding: 12px 16px; font-size: 0.9rem; border-radius: var(--radius-full); cursor: pointer;">Cancel</button>
+          <button class="btn btn-primary" id="btn-confirm-reveal-yes" style="flex: 1; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; padding: 12px 16px; font-size: 0.9rem; border-radius: var(--radius-full); border: none; color: white; cursor: pointer; background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 40%, var(--primary-accent) 100%);">Yes, Reveal</button>
+        </div>
       </div>
     </div>
   </dialog>
@@ -2107,61 +2148,59 @@
     }
 
     function surrenderPuzzle() {
-      if (confirm("Are you sure you want to reveal the answer? This gives 0 stars for today.")) {
-        state.isGaveUp = true;
-        state.topSolved = true;
-        state.bottomSolved = true;
-        
-        fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
-        fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
-        
-        document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
-        document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
-        
-        document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
-        document.getElementById('top-guess-input').disabled = true;
-        document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
-        document.getElementById('bottom-guess-input').disabled = true;
-        
-        const h1Btn = document.getElementById('btn-reveal-hint-1');
-        const h2Btn = document.getElementById('btn-reveal-hint-2');
-        h1Btn.disabled = true;
-        h2Btn.disabled = true;
-        state.hint1Revealed = true;
-        state.hint2Revealed = true;
-        h1Btn.className = "btn btn-primary btn-clue revealed";
-        h1Btn.innerText = state.activePuzzle.top.clue;
-        h2Btn.className = "btn btn-primary btn-clue revealed";
-        h2Btn.innerText = state.activePuzzle.bottom.clue;
-        
-        document.getElementById('btn-giveup').style.display = 'none';
-        
-        sounds.playError();
-        
-        const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
-        const puzzleResults = {
-          solved: true,
-          stars: 0,
-          timeTaken: timeTaken,
-          date: state.activePuzzle.date
-        };
-        
-        state.stats.played++;
-        state.stats.completedPuzzles[state.activePuzzle.date] = puzzleResults;
-        state.stats.streak = 0;
-        
-        saveStatsAndProgress();
-        
-        // Trigger red minus star pop animation for all remaining active stars!
-        const starsBeforeSurrender = Math.max(1, 3 - state.hintsUsed);
-        animateStarDeduction(starsBeforeSurrender);
-        
-        updateActiveStars();
-        
-        setTimeout(() => {
-          showResultsModal(puzzleResults);
-        }, 800);
-      }
+      state.isGaveUp = true;
+      state.topSolved = true;
+      state.bottomSolved = true;
+      
+      fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
+      fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
+      
+      document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
+      document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+      
+      document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
+      document.getElementById('top-guess-input').disabled = true;
+      document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
+      document.getElementById('bottom-guess-input').disabled = true;
+      
+      const h1Btn = document.getElementById('btn-reveal-hint-1');
+      const h2Btn = document.getElementById('btn-reveal-hint-2');
+      h1Btn.disabled = true;
+      h2Btn.disabled = true;
+      state.hint1Revealed = true;
+      state.hint2Revealed = true;
+      h1Btn.className = "btn btn-primary btn-clue revealed";
+      h1Btn.innerText = state.activePuzzle.top.clue;
+      h2Btn.className = "btn btn-primary btn-clue revealed";
+      h2Btn.innerText = state.activePuzzle.bottom.clue;
+      
+      document.getElementById('btn-giveup').style.display = 'none';
+      
+      sounds.playError();
+      
+      const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
+      const puzzleResults = {
+        solved: true,
+        stars: 0,
+        timeTaken: timeTaken,
+        date: state.activePuzzle.date
+      };
+      
+      state.stats.played++;
+      state.stats.completedPuzzles[state.activePuzzle.date] = puzzleResults;
+      state.stats.streak = 0;
+      
+      saveStatsAndProgress();
+      
+      // Trigger red minus star pop animation for all remaining active stars!
+      const starsBeforeSurrender = Math.max(1, 3 - state.hintsUsed);
+      animateStarDeduction(starsBeforeSurrender);
+      
+      updateActiveStars();
+      
+      setTimeout(() => {
+        showResultsModal(puzzleResults);
+      }, 800);
     }
 
     function handleFinalPuzzleSolve() {
@@ -2621,7 +2660,13 @@
 
       document.getElementById('btn-reveal-hint-1').onclick = () => revealHint(1);
       document.getElementById('btn-reveal-hint-2').onclick = () => revealHint(2);
-      document.getElementById('btn-giveup').onclick = () => surrenderPuzzle();
+      document.getElementById('btn-giveup').onclick = () => {
+        document.getElementById('modal-confirm-reveal').showModal();
+      };
+      document.getElementById('btn-confirm-reveal-yes').onclick = () => {
+        document.getElementById('modal-confirm-reveal').close();
+        surrenderPuzzle();
+      };
 
       // Help onboarding automatically triggers on load, unless they opt out
       const dontShowRules = localStorage.getItem('smash_dont_show_rules');
