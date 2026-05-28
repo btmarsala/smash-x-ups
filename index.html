@@ -365,7 +365,7 @@
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
       box-shadow: var(--card-shadow);
-      padding: 32px 24px;
+      padding: 32px 24px 0 24px;
       border-radius: 12px;
       width: 100%;
       transition: var(--transition-smooth);
@@ -513,56 +513,105 @@
       min-height: 60px; /* Same height as clue buttons */
     }
 
-    /* Taller Clue buttons with custom revealed card states */
+    /* Nested Card Clue Button Overrides */
     .btn-clue {
-      min-height: 60px; /* Taller height to accommodate potential two lines of clue text */
-      padding: 14px 20px;
-      line-height: 1.35;
-      text-transform: uppercase;
-      font-size: 0.9rem;
+      width: calc(100% + 48px) !important;
+      margin: 24px -24px 0 -24px !important;
+      border: none !important;
+      border-top: 1.5px solid var(--card-border) !important;
+      padding: 14px 24px !important;
+      font-family: var(--font-main) !important;
+      font-weight: 600 !important;
+      font-size: 0.9rem !important;
+      cursor: pointer !important;
+      text-align: center !important;
+      transition: var(--transition-smooth) !important;
+      z-index: 12 !important;
+      position: relative !important;
+      border-radius: 0 0 10.5px 10.5px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      min-height: 52px !important;
+      line-height: 1.35 !important;
+      box-shadow: none !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
     }
 
     .btn-clue.revealed {
-      background: rgba(99, 102, 241, 0.08) !important;
-      border: 1.5px dashed var(--primary-accent) !important;
-      color: var(--primary-accent) !important;
-      text-transform: none !important; /* Sentence casing exact */
+      background: rgba(99, 102, 241, 0.04) !important;
+      color: var(--text-main) !important;
+      border: none !important;
+      border-top: 1.5px dashed var(--card-border) !important;
+      text-transform: none !important;
       font-weight: 500 !important;
       cursor: default !important;
       pointer-events: none !important;
-      box-shadow: none !important;
+      border-radius: 0 0 10.5px 10.5px !important;
+      font-style: italic !important;
+      letter-spacing: normal !important;
     }
 
     [data-theme="dark"] .btn-clue.revealed {
-      background: rgba(129, 140, 248, 0.12) !important;
-      color: #c7d2fe !important; /* Much lighter lavender/indigo for high contrast readability */
-      border-color: #818cf8 !important;
+      background: rgba(129, 140, 248, 0.08) !important;
+      color: #c7d2fe !important;
+      border-top: 1.5px dashed rgba(255, 255, 255, 0.15) !important;
     }
 
-    .btn-clue:disabled {
+    /* Solved / Disabled unrevealed state */
+    .btn-clue:disabled:not(.revealed) {
       opacity: 0.55 !important;
       pointer-events: none !important;
       cursor: not-allowed !important;
+      filter: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Solved / Disabled revealed state (locks visually but preserves card readability!) */
+    .btn-clue:disabled.revealed {
+      background: rgba(99, 102, 241, 0.04) !important;
+      color: var(--text-main) !important;
+      border: none !important;
+      border-top: 1.5px dashed var(--card-border) !important;
+      text-transform: none !important;
+      font-weight: 500 !important;
+      cursor: default !important;
+      pointer-events: none !important;
+      border-radius: 0 0 10.5px 10.5px !important;
+      opacity: 1 !important;
+      box-shadow: none !important;
+      filter: none !important;
+      font-style: italic !important;
+      letter-spacing: normal !important;
+    }
+
+    [data-theme="dark"] .btn-clue:disabled.revealed {
+      background: rgba(129, 140, 248, 0.08) !important;
+      color: #c7d2fe !important;
+      border-top: 1.5px dashed rgba(255, 255, 255, 0.15) !important;
     }
 
     #btn-reveal-hint-1:not(.revealed) {
       background: #38bdf8 !important;
       color: #ffffff !important;
+      border-top-color: #38bdf8 !important;
     }
 
     #btn-reveal-hint-1:not(.revealed):hover:not(:disabled) {
       background: #0ea5e9 !important;
-      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3) !important;
+      border-top-color: #0ea5e9 !important;
     }
 
     #btn-reveal-hint-2:not(.revealed) {
       background: var(--primary-accent) !important;
       color: #ffffff !important;
+      border-top-color: var(--primary-accent) !important;
     }
 
     #btn-reveal-hint-2:not(.revealed):hover:not(:disabled) {
       background: var(--primary-accent-hover) !important;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+      border-top-color: var(--primary-accent-hover) !important;
     }
 
     /* Clue Text Boxes style */
@@ -1116,6 +1165,7 @@
         </div>
         <!-- Masked focusable typing input -->
         <input type="text" class="text-input" id="top-guess-input" placeholder="Type Top Guess..." aria-label="Top guess input">
+        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-1">Reveal Clue 1</button>
       </div>
 
       <!-- Connector Segment -->
@@ -1131,12 +1181,11 @@
         </div>
         <!-- Masked focusable typing input -->
         <input type="text" class="text-input" id="bottom-guess-input" placeholder="Type Bottom Guess..." aria-label="Bottom guess input">
+        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
       </div>
 
       <!-- Large Screenshot rounded buttons -->
       <div class="buttons-section">
-        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-1">Reveal Clue 1</button>
-        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
         <button class="btn btn-reveal-answer" id="btn-giveup" disabled>Reveal Answer</button>
       </div>
 
