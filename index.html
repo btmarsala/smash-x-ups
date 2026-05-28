@@ -702,6 +702,48 @@
       color: #f1f5f9;
     }
 
+    /* Gradient Offset Shadow for all modals (Neo-brutalist offset gradient style) */
+    dialog {
+      overflow: visible;
+    }
+    dialog .modal-content {
+      position: relative;
+      overflow: visible;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    /* Card Background */
+    dialog .modal-content::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+    }
+    [data-theme="dark"] dialog .modal-content::before {
+      background: #1e293b;
+      border-color: #334155;
+    }
+    /* Gradient Shadow */
+    dialog .modal-content::after {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      top: 6px;
+      left: 6px;
+      right: -6px;
+      bottom: -6px;
+      background: linear-gradient(135deg, #38bdf8 0%, var(--primary-accent) 100%);
+      border-radius: var(--radius-md);
+      pointer-events: none;
+    }
+
     .modal-header {
       display: flex;
       justify-content: space-between;
@@ -1398,7 +1440,7 @@
   <dialog id="modal-confirm-reveal">
     <div class="modal-content">
       <div class="modal-header" style="justify-content: center; position: relative;">
-        <h2 class="modal-title" style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.05em; text-align: center; width: 100%; text-transform: uppercase;">REVEAL ANSWER</h2>
+        <h2 class="modal-title" style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.05em; text-align: center; width: 100%; text-transform: uppercase;">REVEAL ANSWER?</h2>
       </div>
       <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px; text-align: center;">
         <p style="font-size: 1.0rem; line-height: 1.5; color: var(--text-main); margin: 0;">Are you sure you want to reveal the answer? This gives 0 stars for today.</p>
