@@ -326,7 +326,7 @@
 
     .letter-tile.filled {
       border-bottom-color: var(--text-dark);
-      animation: popIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: popIn 0.14s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     [data-theme="dark"] .letter-tile.filled {
@@ -1054,14 +1054,28 @@
     }
 
     @keyframes popIn {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      0% { transform: scale(0.8); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 0.9; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-6px); }
       40%, 80% { transform: translateX(6px); }
+    }
+
+    @keyframes successBounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .letter-tile.success-bounce {
+      animation: successBounce 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
 
     @keyframes starActivePop {
@@ -1906,6 +1920,7 @@
         inputEl.disabled = true;
         
         fillAllTilesCorrectly(position, answer);
+        triggerSuccessWave(position);
         sounds.playSuccess();
 
         // Immediately disable and dull the associated clue button
@@ -1951,6 +1966,23 @@
           }
           tile.classList.add('filled');
         }
+      });
+    }
+
+    function triggerSuccessWave(position) {
+      const container = document.getElementById(`${position}-blanks`);
+      const tiles = Array.from(container.querySelectorAll('.letter-tile')).filter(tile => !tile.classList.contains('punctuation'));
+      
+      tiles.forEach((tile, index) => {
+        tile.classList.remove('success-bounce');
+        void tile.offsetWidth;
+        tile.style.animationDelay = `${index * 50}ms`;
+        tile.classList.add('success-bounce');
+        
+        tile.addEventListener('animationend', () => {
+          tile.classList.remove('success-bounce');
+          tile.style.animationDelay = '';
+        }, { once: true });
       });
     }
 
