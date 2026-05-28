@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smash x Ups - Daily Word Smashup Game</title>
+  <meta name="description" content="Masher of words! Guess the top and bottom words connecting through a shared syllable or set of letters. A daily Wordle-style challenge.">
+  
+  <!-- Fonts Import -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap">
+
+  <style>
+    /* ==========================================================================
+       SMASH X UPS - PREMIUM MODERN CSS DESIGN SYSTEM
+       ========================================================================== */
+
+    :root {
+      /* Default Theme: Premium Light Mode (matches mockups exactly) */
+      --bg-app-light: #ffffff; /* Page Background */
+      --bg-app-dark: radial-gradient(circle at 50% 0%, #111827 0%, #030712 100%);
+      
+      --primary-accent: #6366f1; /* Vibrant mockup purple (Indigo) */
+      --primary-accent-hover: #4f46e5;
+      --primary-accent-glow: rgba(99, 102, 241, 0.15);
+      
+      --secondary-accent: #06b6d4; /* Cyan */
+      
+      /* Status Colors (aligned with mockups) */
+      --color-correct: #059669; /* Rich mint green */
+      --color-incorrect: #dc2626; /* Deep red */
+      
+      /* Text Colors */
+      --text-main: #334155; /* Slate 700 */
+      --text-muted: #64748b; /* Slate 500 */
+      --text-dark: #0f172a;
+      
+      /* Card Backgrounds (matches steel-gray screenshot container) */
+      --card-bg: #f8fafc; /* Very light slate-gray/blue background */
+      --card-border: #cbd5e1; /* Slate 300 */
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      
+      /* Spacing & Borders */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --font-main: 'Lexend', sans-serif;
+      --font-display: 'Lexend', sans-serif;
+      
+      /* Core Transition */
+      --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Theme Variables overrides */
+    [data-theme="dark"] {
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dark: #f8fafc;
+      
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      
+      --primary-accent: #818cf8;
+      --primary-accent-glow: rgba(129, 140, 248, 0.2);
+    }
+
+    /* CSS Reset & Core Elements */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: #f8fafc; /* Clean gray-blue page background */
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      overflow-x: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    body[data-theme="dark"] {
+      background: var(--bg-app-dark);
+    }
+
+    /* Mobile viewport simulator wrapper - keeps the app feeling exactly like the phone mockups */
+    #app-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-app-light);
+      min-height: 100vh;
+      position: relative;
+      border-left: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.02);
+    }
+
+    [data-theme="dark"] #app-container {
+      background: #0f172a;
+      border-color: #1e293b;
+    }
+
+    /* Continuous page styling for desktop and tablet viewports */
+    @media (min-width: 768px) {
+      body {
+        background: #ffffff !important;
+      }
+      body[data-theme="dark"] {
+        background: #0f172a !important;
+      }
+      #app-container {
+        border-left: none !important;
+        border-right: none !important;
+        box-shadow: none !important;
+        max-width: 600px;
+      }
+    }
+
+    /* Header & Navigation Bar (Aligned exactly to screenshot!) */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: var(--bg-app-light);
+      z-index: 100;
+    }
+
+    [data-theme="dark"] header {
+      background: #0f172a;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* SMASHXUPS Logo wrapping */
+    h1 {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-image {
+      height: 22px; /* Aligned exactly with the 22px height of the SVG icons */
+      width: auto;
+      display: block;
+      transition: var(--transition-smooth);
+    }
+
+    [data-theme="dark"] .logo-image {
+      filter: invert(0.9);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: var(--transition-smooth);
+    }
+
+    [data-theme="dark"] .nav-btn {
+      color: #94a3b8;
+    }
+
+    .nav-btn:hover {
+      background: #f1f5f9;
+      color: var(--primary-accent);
+    }
+
+    [data-theme="dark"] .nav-btn:hover {
+      background: #1e293b;
+    }
+
+    #nav-date-back:hover, #nav-date-forward:hover {
+      background: #f1f5f9;
+      color: var(--primary-accent) !important;
+    }
+
+    [data-theme="dark"] #nav-date-back:hover, [data-theme="dark"] #nav-date-forward:hover {
+      background: #1e293b;
+    }
+
+    #btn-test-reset-all:hover {
+      background: #f1f5f9;
+      color: var(--primary-accent) !important;
+    }
+
+    [data-theme="dark"] #btn-test-reset-all:hover {
+      background: #1e293b;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    /* Screens / Layout Management */
+    .screen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      padding: 0 24px 24px 24px;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Category Label (Centered light-gray uppercase text) */
+    .category-label {
+      font-size: 0.8rem;
+      font-family: var(--font-main);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 0 0 16px 0;
+      user-select: none;
+    }
+
+    [data-theme="dark"] .category-label {
+      color: #64748b;
+    }
+
+    /* Daily Date Label below logo */
+    .daily-date-label {
+      font-size: 0.82rem;
+      font-family: var(--font-main);
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin: 8px 0 20px 0;
+      user-select: none;
+    }
+
+    [data-theme="dark"] .daily-date-label {
+      color: #64748b;
+    }
+
+    /* Connector Syllable: HUGE centered gradient text directly on the page! */
+    .connector-text {
+      font-family: var(--font-display);
+      font-size: 4.5rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin: 4px 0;
+      user-select: none;
+      transition: var(--transition-smooth);
+      display: block;
+    }
+
+    /* Blanks Board Layout */
+    .blanks-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 28px; /* High horizontal gap between words so they separate clearly */
+      align-items: center;
+      min-height: 50px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .word-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px; /* Distinct gap between letter dashes so players can count spaces easily */
+      justify-content: center;
+    }
+
+    .letter-tile {
+      position: relative; /* For cursor caret placement */
+      width: 20px; /* Precise width for each letter dash */
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end; /* letter sits directly on top of line */
+      padding-bottom: 4px;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      border: none;
+      border-bottom: 3.5px solid #475569; /* Solid bold dark bottom dash */
+      transition: var(--transition-smooth);
+      user-select: none;
+    }
+
+    [data-theme="dark"] .letter-tile {
+      border-bottom-color: #94a3b8;
+      color: #fff;
+    }
+
+    .letter-tile.filled {
+      border-bottom-color: var(--text-dark);
+      animation: popIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    [data-theme="dark"] .letter-tile.filled {
+      border-bottom-color: #fff;
+    }
+
+    /* Caret Cursor Keyframes & Blinking Line */
+    @keyframes cursorBlink {
+      50% { background-color: transparent; }
+    }
+
+    .letter-tile.cursor::after {
+      content: "";
+      position: absolute;
+      width: 2.5px;
+      height: 20px;
+      background-color: var(--primary-accent);
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8px;
+      animation: cursorBlink 1s step-end infinite;
+    }
+
+    .letter-tile.punctuation {
+      border-bottom: none !important;
+      width: auto;
+      min-width: 8px;
+      margin: 0 -2px;
+      user-select: none;
+    }
+
+
+
+    /* Blanks Card Wrapper (Clean rectangular container exactly as shown in screenshot!) */
+    .blanks-wrapper {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      padding: 32px 24px;
+      border-radius: 12px;
+      width: 100%;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative; /* For hidden text-input overlay */
+      cursor: pointer; /* Tap card to type */
+      min-height: 120px;
+    }
+
+    /* Opaque neo-brutalist offset shadows for top/bottom puzzles */
+    #top-wrapper {
+      box-shadow: 6px 6px 0px #38bdf8 !important;
+    }
+
+    #bottom-wrapper {
+      box-shadow: 6px 6px 0px var(--primary-accent) !important;
+    }
+
+    /* Combined offset shadow + glow when actively focused for typing */
+    #top-wrapper:focus-within {
+      box-shadow: 6px 6px 0px #38bdf8, 0 0 0 3.5px var(--primary-accent-glow) !important;
+    }
+
+    #bottom-wrapper:focus-within {
+      border-color: #38bdf8 !important;
+      box-shadow: 6px 6px 0px var(--primary-accent), 0 0 0 3.5px rgba(56, 189, 248, 0.25) !important;
+    }
+
+
+
+    /* Focus Within Glow card */
+    .blanks-wrapper:focus-within {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3.5px var(--primary-accent-glow);
+    }
+
+    .blanks-wrapper.correct {
+      background: #e6f7f0; /* Soft mint green mockup background */
+      border-color: #a7f3d0;
+      cursor: default;
+    }
+
+    [data-theme="dark"] .blanks-wrapper.correct {
+      background: #1e293b !important;
+      border-color: var(--color-correct) !important;
+    }
+
+    #top-wrapper.correct .letter-tile {
+      border-bottom-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    #bottom-wrapper.correct .letter-tile {
+      border-bottom-color: var(--primary-accent);
+      color: var(--primary-accent);
+    }
+
+    .blanks-wrapper.incorrect {
+      animation: shake 0.5s ease-in-out;
+      background: #fee2e2; /* Soft pink mockup background */
+      border-color: #fca5a5;
+    }
+
+    .blanks-wrapper.incorrect .letter-tile {
+      border-bottom-color: var(--color-incorrect);
+      color: var(--color-incorrect);
+    }
+
+    /* Visually mask the inputs entirely: captures typing but sits unseen on top of the card wrapper */
+    .text-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: auto;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .text-input:disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* Large mockup buttons at the bottom */
+    .buttons-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: auto;
+      padding: 24px 0 12px 0;
+      width: 100%;
+    }
+
+    .btn {
+      font-family: var(--font-main);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 14px 20px;
+      border-radius: var(--radius-full);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      width: 100%;
+      background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 40%, var(--primary-accent) 100%);
+      color: #ffffff;
+    }
+
+    .btn:hover:not(:disabled) {
+      filter: brightness(1.08);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn:disabled {
+      background: #f1f5f9 !important;
+      color: #94a3b8 !important;
+      border: 1px dashed #cbd5e1 !important;
+      cursor: not-allowed;
+      box-shadow: none !important;
+      filter: none !important;
+      opacity: 0.65;
+    }
+
+    [data-theme="dark"] .btn:disabled {
+      background: #1e293b !important;
+      color: #475569 !important;
+      border: 1px dashed #334155 !important;
+    }
+
+    .btn-reveal-answer {
+      min-height: 60px; /* Same height as clue buttons */
+    }
+
+    /* Taller Clue buttons with custom revealed card states */
+    .btn-clue {
+      min-height: 60px; /* Taller height to accommodate potential two lines of clue text */
+      padding: 14px 20px;
+      line-height: 1.35;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .btn-clue.revealed {
+      background: rgba(99, 102, 241, 0.08) !important;
+      border: 1.5px dashed var(--primary-accent) !important;
+      color: var(--primary-accent) !important;
+      text-transform: none !important; /* Sentence casing exact */
+      font-weight: 500 !important;
+      cursor: default !important;
+      pointer-events: none !important;
+      box-shadow: none !important;
+    }
+
+    [data-theme="dark"] .btn-clue.revealed {
+      background: rgba(129, 140, 248, 0.12) !important;
+      color: #c7d2fe !important; /* Much lighter lavender/indigo for high contrast readability */
+      border-color: #818cf8 !important;
+    }
+
+    .btn-clue:disabled {
+      opacity: 0.55 !important;
+      pointer-events: none !important;
+      cursor: not-allowed !important;
+    }
+
+    #btn-reveal-hint-1:not(.revealed) {
+      background: #38bdf8 !important;
+      color: #ffffff !important;
+    }
+
+    #btn-reveal-hint-1:not(.revealed):hover:not(:disabled) {
+      background: #0ea5e9 !important;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3) !important;
+    }
+
+    #btn-reveal-hint-2:not(.revealed) {
+      background: var(--primary-accent) !important;
+      color: #ffffff !important;
+    }
+
+    #btn-reveal-hint-2:not(.revealed):hover:not(:disabled) {
+      background: var(--primary-accent-hover) !important;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    }
+
+    /* Clue Text Boxes style */
+    .clue-overlay {
+      background: rgba(99, 102, 241, 0.05);
+      border: 1px dashed rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      text-align: center;
+      animation: slideDown 0.25s ease-out forwards;
+    }
+
+    [data-theme="dark"] .clue-overlay {
+      color: #f1f5f9;
+    }
+
+    /* Standard Modal Styles (using native HTML5 <dialog>) */
+    dialog {
+      border: none;
+      background: transparent;
+      outline: none;
+      margin: auto;
+      max-width: 420px;
+      width: calc(100% - 32px);
+      max-height: 85vh;
+    }
+
+    dialog::backdrop {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    dialog[open] .modal-content {
+      animation: modalPopIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes modalPopIn {
+      0% { transform: scale(0.92) translateY(12px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    [data-theme="dark"] .modal-content {
+      background: #1e293b;
+      border-color: #334155;
+      color: #f1f5f9;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #1e293b;
+      text-transform: uppercase;
+    }
+
+    [data-theme="dark"] .modal-title {
+      color: #f8fafc;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      outline: none;
+      transition: var(--transition-smooth);
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      width: 34px;
+      height: 34px;
+    }
+
+    .modal-close-btn:hover {
+      background: #f1f5f9;
+      color: var(--primary-accent);
+    }
+
+    [data-theme="dark"] .modal-close-btn:hover {
+      background: #1e293b;
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .modal-body p {
+      margin-bottom: 12px;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .rules-list li::before {
+      content: "🧩 ";
+    }
+
+    .example-box {
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 16px 0;
+      border-left: 4px solid var(--primary-accent);
+    }
+
+    [data-theme="dark"] .example-box {
+      background: #334155;
+    }
+
+    /* Results Stars */
+    .results-stars {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px 0;
+      position: relative; /* Relative for absolute particle explosions */
+    }
+
+    .results-stars .star {
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0);
+      font-size: 3.2rem; /* Make them larger and more celebratory! */
+      transition: color 0.2s;
+      user-select: none;
+    }
+
+    .results-stars .star.active {
+      color: #fbbf24; /* Elegant gold/amber star */
+      filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.45));
+    }
+
+    .results-stars .star.inactive {
+      color: #cbd5e1; /* Soft gray for light mode */
+    }
+
+    [data-theme="dark"] .results-stars .star.inactive {
+      color: #334155; /* Slate gray for dark mode */
+    }
+
+    /* Results Recap Display Cards */
+    .recap-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--text-dark);
+      width: 100%;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+    }
+
+    [data-theme="dark"] .recap-card {
+      color: #fff;
+    }
+
+    .recap-connector {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary-accent);
+      text-align: center;
+      text-transform: uppercase;
+      margin: 4px 0;
+      letter-spacing: -0.01em;
+    }
+
+    .summary-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .summary-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .stat-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    [data-theme="dark"] .stat-item {
+      background: #334155;
+      border-color: #475569;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary-accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    .countdown-box {
+      background: rgba(99, 102, 241, 0.04);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+      margin: 12px 0 20px 0;
+    }
+
+    .countdown-time {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+    }
+
+    /* Settings UI */
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    [data-theme="dark"] .setting-row {
+      border-color: #334155;
+    }
+
+    .setting-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .setting-title {
+      font-weight: 600;
+    }
+
+    .setting-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Standard Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    [data-theme="dark"] .slider {
+      background-color: #475569;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Archive list */
+    .archive-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .archive-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .archive-item:hover {
+      transform: translateX(4px);
+      border-color: var(--primary-accent);
+    }
+
+    .archive-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .archive-day {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .archive-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .archive-status {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .archive-stars {
+      color: #fbbf24;
+    }
+
+    .archive-locked {
+      color: var(--text-muted);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    @keyframes starActivePop {
+      0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.4) rotate(15deg);
+      }
+      80% {
+        transform: scale(0.9) rotate(-5deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes starInactivePop {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.15);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Simulator App Container -->
+  <div id="app-container">
+    
+    <!-- Top Global Header (Matches screenshot header exactly!) -->
+    <header>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="logo-container" id="logo-home">
+          <h1><img src="logo.png" alt="Smash X Ups" class="logo-image"></h1>
+        </div>
+        <!-- Small Test-Reset Button (Testing shortcut) -->
+        <button id="btn-test-reset-all" title="Reset All Game Stats (Testing)" style="background: transparent; border: none; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; transition: var(--transition-smooth); outline: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </button>
+      </div>
+      
+      <div class="nav-actions">
+        <!-- Circular Help Button ? -->
+        <button class="nav-btn" id="nav-btn-how" title="How to Play">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <!-- Calendar / Archive Button -->
+        <button class="nav-btn" id="nav-btn-archive" title="Archive">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </button>
+        <!-- Gear / Settings Button -->
+        <button class="nav-btn" id="nav-btn-settings" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- SCREEN 1: CORE GAMEPLAY -->
+    <main class="screen active" id="screen-game">
+      
+      <!-- Daily Puzzle Date Container with Navigation Arrows -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 8px 0 20px 0;">
+        <!-- Back Arrow Button (Older puzzles) -->
+        <button id="nav-date-back" style="background: transparent; border: none; font-size: 1.3rem; color: #94a3b8; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); width: 32px; height: 32px; border-radius: 50%; outline: none;" aria-label="Previous puzzle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+
+        <!-- Daily Puzzle Date -->
+        <div class="daily-date-label" id="game-puzzle-date" style="margin: 0; padding: 0; user-select: none;">05/27/26</div>
+
+        <!-- Forward Arrow Button (Newer puzzles) -->
+        <button id="nav-date-forward" style="background: transparent; border: none; font-size: 1.3rem; color: #94a3b8; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); width: 32px; height: 32px; border-radius: 50%; outline: none;" aria-label="Next puzzle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Active Star Rating Tracker Container -->
+      <div style="position: relative; display: flex; justify-content: center; align-items: center; margin: -12px 0 20px 0; width: 100%;">
+        <!-- Active Star Rating Tracker (Always visible, dynamically updates as hints are revealed) -->
+        <div id="game-completed-stars" style="display: flex; justify-content: center; gap: 4px; font-size: 1.5rem; color: #fbbf24; font-family: var(--font-display); letter-spacing: 0.1em; user-select: none; margin: 0;">★★★</div>
+        <!-- Red minus indicator that pops and floats upward -->
+        <div id="stars-deduction-badge" style="position: absolute; left: calc(50% + 45px); color: #dc2626; font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); opacity: 0; pointer-events: none; user-select: none;">-1</div>
+      </div>
+
+      <!-- Top Puzzle Card Wrapper -->
+      <div class="blanks-wrapper" id="top-wrapper">
+        <span class="category-label" id="top-category">1. PERSON</span>
+        <div class="blanks-container" id="top-blanks">
+          <!-- Rendered dynamically -->
+        </div>
+        <!-- Masked focusable typing input -->
+        <input type="text" class="text-input" id="top-guess-input" placeholder="Type Top Guess..." aria-label="Top guess input">
+      </div>
+
+      <!-- Connector Segment -->
+      <div style="margin: 20px 0; display: flex; justify-content: center; align-items: center;">
+        <div class="connector-text" id="connector-letters">GUY</div>
+      </div>
+
+      <!-- Bottom Puzzle Card Wrapper -->
+      <div class="blanks-wrapper" id="bottom-wrapper">
+        <span class="category-label" id="bottom-category">2. PERSON</span>
+        <div class="blanks-container" id="bottom-blanks">
+          <!-- Rendered dynamically -->
+        </div>
+        <!-- Masked focusable typing input -->
+        <input type="text" class="text-input" id="bottom-guess-input" placeholder="Type Bottom Guess..." aria-label="Bottom guess input">
+      </div>
+
+      <!-- Large Screenshot rounded buttons -->
+      <div class="buttons-section">
+        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-1">Reveal Clue 1</button>
+        <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
+        <button class="btn btn-reveal-answer" id="btn-giveup" disabled>Reveal Answer</button>
+      </div>
+
+    </main>
+
+    <!-- SCREEN 2: PUZZLE ARCHIVE -->
+    <section class="screen" id="screen-archive">
+      <h2 style="font-family: var(--font-display); margin: 20px 0 8px 0;">Puzzle Archive</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Play past daily challenges. Your stars and streaks are saved!</p>
+      <div class="archive-list" id="archive-items-container">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- SCREEN 3: SETTINGS -->
+    <section class="screen" id="screen-settings">
+      <h2 style="font-family: var(--font-display); margin: 20px 0 20px 0;">Settings</h2>
+      
+      <div class="settings-list">
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Dark Theme</span>
+            <span class="setting-desc">Switch between bright mockup and neon dark modes.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-toggle-theme">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+
+      </div>
+
+      <!-- Quick Lifetime Stats Summary in settings screen -->
+      <h3 style="font-family: var(--font-display); font-size: 1rem; margin: 32px 0 12px 0; text-transform: uppercase; letter-spacing: 0.05em;">Your Streaks & Stats</h3>
+      <div class="stats-grid" id="settings-stats-grid">
+        <div class="stat-item">
+          <span class="stat-num" id="stats-played-side">0</span>
+          <span class="stat-label">Played</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stats-winpct-side">0%</span>
+          <span class="stat-label">Win %</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stats-streak-side">0</span>
+          <span class="stat-label">Streak</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stats-stars-side">0</span>
+          <span class="stat-label">Avg Stars</span>
+        </div>
+      </div>
+      
+      <div style="margin-top: auto; padding: 20px 0; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+        Smash x Ups v1.0.0 • Developed with Antigravity 💜
+      </div>
+    </section>
+
+  </div>
+
+  <!-- NATIVE MODAL 1: HOW TO PLAY -->
+  <dialog id="modal-how-to-play">
+    <div class="modal-content">
+      <div class="modal-header" style="justify-content: center; position: relative;">
+        <h2 class="modal-title" style="font-size: 1.8rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.02em; background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; text-align: center; width: 100%;">HOW TO PLAY</h2>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+        <p style="font-size: 1.05rem; line-height: 1.5; color: var(--text-main); text-align: left;">Guess the two phrases that share a connecting word, sound or set of letters.</p>
+        
+        <p style="font-size: 1.05rem; font-weight: 600; color: var(--text-dark); margin-top: 8px; text-align: left;">Examples:</p>
+        
+        <ul style="list-style-type: disc; padding-left: 20px; margin: 4px 0 12px 0; display: flex; flex-direction: column; gap: 8px; font-size: 1.05rem; color: var(--text-main); text-align: left;">
+          <li>Larry <strong>KING</strong> Kong</li>
+          <li>Luke Sky<strong>WALKER</strong> Texas Ranger</li>
+          <li>Mambo Number <strong>FIVE</strong> Guys</li>
+        </ul>
+
+        <p style="font-size: 1.05rem; line-height: 1.5; color: var(--text-main); text-align: left;">Stuck? Reveal a clue—but you'll lose a star.</p>
+
+        <button class="btn btn-primary" onclick="window.closeHowToPlayModal(event);" style="margin-top: 16px; padding: 14px 20px; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 40%, var(--primary-accent) 100%); border-radius: var(--radius-full); border: none; color: white; cursor: pointer; text-transform: uppercase;">Let's Smash!</button>
+
+        <div style="text-align: center; margin-top: 8px;">
+          <a href="#" id="how-to-play-login-link" style="color: var(--primary-accent); font-weight: 600; text-decoration: underline; font-size: 0.95rem; transition: var(--transition-smooth);">Log in or create an account</a>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 14px;">
+          <input type="checkbox" id="how-to-play-dontshow" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-accent);">
+          <label for="how-to-play-dontshow" style="font-size: 0.95rem; font-weight: 500; cursor: pointer; user-select: none; color: var(--text-main);">Don't show again</label>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- NATIVE MODAL 2: GAME RESULTS -->
+  <dialog id="modal-results">
+    <div class="modal-content">
+      <div class="modal-header" style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 100%; padding-top: 14px;">
+        <!-- Stars first! Centered at the very top -->
+        <div class="results-stars" id="results-stars-container" style="margin: 0 0 10px 0;">
+          <span class="star" id="results-star-1">★</span>
+          <span class="star" id="results-star-2">★</span>
+          <span class="star" id="results-star-3">★</span>
+        </div>
+        <!-- Title & Subtitle -->
+        <h2 class="modal-title" id="results-modal-title" style="font-size: 1.8rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.02em; color: var(--text-dark); text-align: center; width: 100%;">SMA-MAZING!!!</h2>
+        <div id="results-hints-revealed" style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: none; margin-top: 4px; text-align: center; width: 100%;">0/2 hints revealed</div>
+        <button onclick="document.getElementById('modal-results').close();" aria-label="Close modal" class="modal-close-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Answers recap summary with horizontal dividers -->
+        <hr style="border: none; border-top: 1.5px solid var(--card-border); margin: 16px 0; width: 100%;">
+        <div class="results-phrase-recap" style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 18px 0; width: 100%;">
+          <div id="results-top-value" style="font-family: var(--font-display); font-size: 1.55rem; font-weight: 700; text-transform: uppercase; text-align: center; color: var(--text-muted); width: 100%; letter-spacing: -0.01em; line-height: 1.2;">---</div>
+          <div id="results-connector-value" style="font-family: var(--font-display); font-size: 3.5rem; font-weight: 800; background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; text-align: center; text-transform: uppercase; margin: 4px 0; letter-spacing: -0.02em; line-height: 1;">---</div>
+          <div id="results-bottom-value" style="font-family: var(--font-display); font-size: 1.55rem; font-weight: 700; text-transform: uppercase; text-align: center; color: var(--text-muted); width: 100%; letter-spacing: -0.01em; line-height: 1.2;">---</div>
+        </div>
+        <hr style="border: none; border-top: 1.5px solid var(--card-border); margin: 16px 0; width: 100%;">
+
+        <!-- Hints List Section -->
+        <div class="results-hints-section" style="display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 16px 0 24px 0; text-align: center; width: 100%;">
+          <h4 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; text-transform: uppercase; color: var(--text-dark); letter-spacing: 0.05em; margin-bottom: 2px;">Hints</h4>
+          <div id="results-hint-1-value" style="font-size: 1rem; color: var(--text-main); font-weight: 500; line-height: 1.4;">---</div>
+          <div id="results-hint-2-value" style="font-size: 1rem; color: var(--text-main); font-weight: 500; line-height: 1.4;">---</div>
+        </div>
+
+        <!-- User Stats Breakdown -->
+        <h3 style="font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Your Lifetime Stats</h3>
+        <div class="stats-grid" id="results-stats-grid">
+          <div class="stat-item">
+            <span class="stat-num" id="stats-played">0</span>
+            <span class="stat-label">Played</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stats-winpct">0%</span>
+            <span class="stat-label">Win %</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stats-streak">0</span>
+            <span class="stat-label">Streak</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stats-stars">0</span>
+            <span class="stat-label">Avg Stars</span>
+          </div>
+        </div>
+
+        <!-- Sharing Button -->
+        <button class="btn btn-primary" id="btn-results-share" style="margin-top: 16px; gap: 8px;">
+          <!-- Share icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          Share Result
+        </button>
+
+
+
+      </div>
+    </div>
+  </dialog>
+
+  <!-- JAVASCRIPT GAMECORE ENGINE (Consolidated to resolve local browser CORS security issues) -->
+  <script>
+    // Parsed puzzles list exported directly
+    const puzzles = [
+      {
+        date: "2026-05-25",
+        connector: "OZ",
+        top: {
+          answer: "THE WIZARD OF",
+          category: "MOVIE",
+          clue: "Emerald ruler"
+        },
+        bottom: {
+          answer: "–ZY OSBOURNE",
+          category: "PERSON",
+          clue: "Black prince"
+        }
+      },
+      {
+        date: "2026-05-26",
+        connector: "WILLY",
+        top: {
+          answer: "FREE",
+          category: "MOVIE",
+          clue: "A whale tale"
+        },
+        bottom: {
+          answer: "WONKA",
+          category: "MOVIE",
+          clue: "A chocolate tale"
+        }
+      },
+      {
+        date: "2026-05-27",
+        connector: "GUY",
+        top: {
+          answer: "BILL NYE THE SCIENCE",
+          category: "PERSON",
+          clue: "Ruler of science"
+        },
+        bottom: {
+          answer: "FIERI",
+          category: "PERSON",
+          clue: "Mayor of Flavortown"
+        }
+      },
+      {
+        date: "2026-05-28",
+        connector: "BACK",
+        top: {
+          answer: "NICKEL",
+          category: "BAND",
+          clue: "Canadian \"band\""
+        },
+        bottom: {
+          answer: "TO THE FUTURE",
+          category: "MOVIE",
+          clue: "Canadian time-traveler"
+        }
+      },
+      {
+        date: "2026-05-29",
+        connector: "KING",
+        top: {
+          answer: "LARRY",
+          category: "PERSON",
+          clue: "King of TV"
+        },
+        bottom: {
+          answer: "KONG",
+          category: "ANIMAL",
+          clue: "King of the apes"
+        }
+      }
+    ];
+
+    // Stub sounds object to completely remove audio effects while maintaining calls safely
+    const sounds = {
+      playClick() {},
+      playSuccess() {},
+      playError() {},
+      playCelebrate() {}
+    };
+
+    // Application state
+    const state = {
+      activeScreen: 'game',
+      activePuzzle: null,
+      puzzlesList: puzzles,
+      
+      // Gameplay progress
+      topSolved: false,
+      bottomSolved: false,
+      hintsUsed: 0,
+      hint1Revealed: false,
+      hint2Revealed: false,
+      timeStarted: null,
+      isGaveUp: false,
+      
+      theme: 'light',
+      soundsEnabled: true,
+      
+      stats: {
+        played: 0,
+        won: 0,
+        streak: 0,
+        maxStreak: 0,
+        stars: 0,
+        completedPuzzles: {}, // Map of Date -> { stars, timeTaken, solved }
+        partialProgress: {}   // Map of Date -> { topSolved, topGuess, bottomSolved, bottomGuess, hint1Revealed, hint2Revealed, hintsUsed, timeStarted }
+      }
+    };
+
+    // Helper text normalization
+    function normalize(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, '')
+        .replace(/\s+/g, '');
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds) || seconds < 0) return '0s';
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      if (m === 0) return `${s}s`;
+      return `${m}m ${s}s`;
+    }
+
+    function getTodayDateString() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function formatPuzzleDate(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return dateStr;
+      const yyyy = parts[0];
+      const mm = parts[1];
+      const dd = parts[2];
+      const yy = yyyy.slice(-2);
+      return `${mm}/${dd}/${yy}`;
+    }
+
+    // Timer countdown
+    let countdownInterval = null;
+    function startCountdownToMidnight(elementId) {
+      if (countdownInterval) clearInterval(countdownInterval);
+      
+      const updateTimer = () => {
+        const now = new Date();
+        const midnight = new Date();
+        midnight.setHours(24, 0, 0, 0);
+        
+        const diffMs = midnight - now;
+        if (diffMs <= 0) {
+          document.getElementById(elementId).innerText = "New Puzzle Available! Refresh.";
+          clearInterval(countdownInterval);
+          return;
+        }
+        
+        const h = String(Math.floor(diffMs / 3600000)).padStart(2, '0');
+        const m = String(Math.floor((diffMs % 3600000) / 60000)).padStart(2, '0');
+        const s = String(Math.floor((diffMs % 60000) / 1000)).padStart(2, '0');
+        
+        document.getElementById(elementId).innerText = `${h}:${m}:${s}`;
+      };
+
+      updateTimer();
+      countdownInterval = setInterval(updateTimer, 1000);
+    }
+
+    // Stats storage key
+    function getStatsLocalStorageKey() {
+      return 'smash_guest_stats'; // Simple single storage profile
+    }
+
+    function loadStatsAndProgress() {
+      const key = getStatsLocalStorageKey();
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        try {
+          state.stats = JSON.parse(saved);
+          if (!state.stats.completedPuzzles) state.stats.completedPuzzles = {};
+          if (!state.stats.partialProgress) state.stats.partialProgress = {};
+          if (state.stats.stars === undefined) state.stats.stars = 0;
+        } catch (e) {
+          console.error("Failed to load local stats", e);
+        }
+      }
+      
+      // Update sidebar settings screen stats grid
+      updateSettingsStatsGrid();
+    }
+
+    function savePartialProgress() {
+      if (!state.activePuzzle) return;
+      const date = state.activePuzzle.date;
+      
+      // If already completed, remove from partial list
+      if (state.stats.completedPuzzles[date]) {
+        if (state.stats.partialProgress) {
+          delete state.stats.partialProgress[date];
+        }
+        saveStatsAndProgress();
+        return;
+      }
+      
+      if (!state.stats.partialProgress) {
+        state.stats.partialProgress = {};
+      }
+      
+      state.stats.partialProgress[date] = {
+        topSolved: state.topSolved,
+        topGuess: document.getElementById('top-guess-input').value,
+        bottomSolved: state.bottomSolved,
+        bottomGuess: document.getElementById('bottom-guess-input').value,
+        hint1Revealed: state.hint1Revealed,
+        hint2Revealed: state.hint2Revealed,
+        hintsUsed: state.hintsUsed,
+        timeStarted: state.timeStarted
+      };
+      
+      saveStatsAndProgress();
+    }
+
+    function saveStatsAndProgress() {
+      const key = getStatsLocalStorageKey();
+      localStorage.setItem(key, JSON.stringify(state.stats));
+      updateSettingsStatsGrid();
+    }
+
+    function updateSettingsStatsGrid() {
+      document.getElementById('stats-played-side').innerText = state.stats.played;
+      const pct = state.stats.played > 0 ? Math.round((state.stats.won / state.stats.played) * 100) : 0;
+      document.getElementById('stats-winpct-side').innerText = `${pct}%`;
+      document.getElementById('stats-streak-side').innerText = state.stats.streak;
+      
+      const avg = state.stats.played > 0 ? (state.stats.stars / state.stats.played).toFixed(1) : "0.0";
+      document.getElementById('stats-stars-side').innerHTML = 
+        `<span style="line-height: 1; display: inline-flex; align-items: center;">${avg}</span><span style="color: #fbbf24; font-size: 1.2rem; margin-left: 3px; display: inline-flex; align-items: center; line-height: 1;">★</span>`;
+    }
+
+    // Screen navigation
+    function navigateTo(screenId) {
+      sounds.playClick();
+      document.getElementById('modal-results').close();
+
+      document.querySelectorAll('.screen').forEach(scr => {
+        scr.classList.remove('active');
+      });
+
+      const targetScreen = document.getElementById(`screen-${screenId}`);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+        state.activeScreen = screenId;
+      }
+
+      if (screenId === 'archive') {
+        renderArchiveScreen();
+      }
+    }
+
+    // Game initialiser
+    function setupPuzzleGame(puzzle) {
+      // Check if this puzzle is already completed
+      const savedPuz = state.stats.completedPuzzles[puzzle.date];
+      
+      // Check if there is partial progress saved
+      const partial = state.stats.partialProgress ? state.stats.partialProgress[puzzle.date] : null;
+
+      state.activePuzzle = puzzle;
+      
+      // Load either partial progress or default uncompleted state
+      if (partial) {
+        state.topSolved = partial.topSolved || false;
+        state.bottomSolved = partial.bottomSolved || false;
+        state.hintsUsed = partial.hintsUsed || 0;
+        state.hint1Revealed = partial.hint1Revealed || false;
+        state.hint2Revealed = partial.hint2Revealed || false;
+        state.timeStarted = partial.timeStarted || Date.now();
+      } else {
+        state.topSolved = false;
+        state.bottomSolved = false;
+        state.hintsUsed = 0;
+        state.hint1Revealed = false;
+        state.hint2Revealed = false;
+        state.timeStarted = Date.now();
+      }
+      state.isGaveUp = false;
+
+      // Render puzzle date & category texts
+      const todayStr = getTodayDateString();
+      const dateEl = document.getElementById('game-puzzle-date');
+      dateEl.innerText = formatPuzzleDate(puzzle.date);
+      if (puzzle.date === todayStr) {
+        dateEl.style.color = 'var(--color-correct)'; // Mint green when it's today's puzzle
+      } else {
+        dateEl.style.color = '';
+      }
+
+      document.getElementById('top-category').innerText = `1. ${puzzle.top.category}`;
+      document.getElementById('bottom-category').innerText = `2. ${puzzle.bottom.category}`;
+
+      // Date navigation arrow visibility based on array index and release date status
+      const currentIndex = state.puzzlesList.findIndex(p => p.date === puzzle.date);
+      
+      const backBtn = document.getElementById('nav-date-back');
+      const forwardBtn = document.getElementById('nav-date-forward');
+      
+      if (backBtn && forwardBtn) {
+        // Hide back arrow if on the oldest puzzle in the database (index 0)
+        backBtn.style.visibility = (currentIndex === 0) ? 'hidden' : 'visible';
+        
+        // Hide forward arrow if on the latest puzzle in the array or the next puzzle is in the future (locked)
+        const nextPuzzle = state.puzzlesList[currentIndex + 1];
+        const isNextFuture = nextPuzzle && nextPuzzle.date > todayStr;
+        forwardBtn.style.visibility = (currentIndex === state.puzzlesList.length - 1 || isNextFuture) ? 'hidden' : 'visible';
+      }
+      
+      // Connector text
+      document.getElementById('connector-letters').innerText = puzzle.connector;
+      
+      // Clue buttons state restore
+      const h1Btn = document.getElementById('btn-reveal-hint-1');
+      const h2Btn = document.getElementById('btn-reveal-hint-2');
+
+      if (state.hint1Revealed) {
+        h1Btn.className = "btn btn-primary btn-clue revealed";
+        h1Btn.innerText = puzzle.top.clue;
+        h1Btn.disabled = true;
+      } else {
+        h1Btn.disabled = false;
+        h1Btn.className = "btn btn-primary btn-clue";
+        h1Btn.innerText = "Reveal Clue 1";
+      }
+
+      if (state.hint2Revealed) {
+        h2Btn.className = "btn btn-primary btn-clue revealed";
+        h2Btn.innerText = puzzle.bottom.clue;
+        h2Btn.disabled = true;
+      } else {
+        h2Btn.disabled = false;
+        h2Btn.className = "btn btn-primary btn-clue";
+        h2Btn.innerText = "Reveal Clue 2";
+      }
+
+      // Disable clues for solved sections
+      if (state.topSolved) {
+        h1Btn.disabled = true;
+      }
+      if (state.bottomSolved) {
+        h2Btn.disabled = true;
+      }
+      
+      const giveUpBtn = document.getElementById('btn-giveup');
+      giveUpBtn.style.display = 'flex'; // Ensure button is visible for new play
+      const canGiveUp = (state.hint1Revealed || state.topSolved) && (state.hint2Revealed || state.bottomSolved);
+      giveUpBtn.disabled = !canGiveUp;
+      giveUpBtn.innerText = "Reveal Answer";
+
+      // Render underlines blanks
+      renderBlanks('top', puzzle.top.answer);
+      renderBlanks('bottom', puzzle.bottom.answer);
+
+      // Inputs setup
+      const topInput = document.getElementById('top-guess-input');
+      const bottomInput = document.getElementById('bottom-guess-input');
+
+      topInput.value = partial ? (partial.topGuess || '') : '';
+      topInput.disabled = state.topSolved;
+      topInput.placeholder = state.topSolved ? "" : "Tap card to type top guess...";
+      
+      bottomInput.value = partial ? (partial.bottomGuess || '') : '';
+      bottomInput.disabled = state.bottomSolved;
+      bottomInput.placeholder = state.bottomSolved ? "" : "Tap card to type bottom guess...";
+
+      // Card focus wrappers restore
+      if (state.topSolved) {
+        document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
+        fillAllTilesCorrectly('top', puzzle.top.answer);
+      } else {
+        document.getElementById('top-wrapper').className = 'blanks-wrapper';
+        syncInputToTiles('top', topInput.value);
+      }
+
+      if (state.bottomSolved) {
+        document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+        fillAllTilesCorrectly('bottom', puzzle.bottom.answer);
+      } else {
+        document.getElementById('bottom-wrapper').className = 'blanks-wrapper';
+        syncInputToTiles('bottom', bottomInput.value);
+      }
+
+      // Setup inputs callbacks
+      topInput.oninput = (e) => {
+        syncInputToTiles('top', e.target.value);
+        updateActiveCursor('top');
+        checkGuess('top', false);
+        savePartialProgress(); // Save partial characters
+      };
+      topInput.onfocus = () => updateActiveCursor('top');
+      topInput.onblur = () => {
+        updateActiveCursor('top');
+        savePartialProgress();
+      };
+
+      bottomInput.oninput = (e) => {
+        syncInputToTiles('bottom', e.target.value);
+        updateActiveCursor('bottom');
+        checkGuess('bottom', false);
+        savePartialProgress(); // Save partial characters
+      };
+      bottomInput.onfocus = () => updateActiveCursor('bottom');
+      bottomInput.onblur = () => {
+        updateActiveCursor('bottom');
+        savePartialProgress();
+      };
+
+      // Check keydowns for Enter solves!
+      topInput.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkGuess('top', true);
+        }
+      };
+      bottomInput.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkGuess('bottom', true);
+        }
+      };
+
+      // Auto-focus first unsolved card instantly on desktop
+      setTimeout(() => {
+        if (!state.topSolved) {
+          topInput.focus();
+          updateActiveCursor('top');
+        } else if (!state.bottomSolved) {
+          bottomInput.focus();
+          updateActiveCursor('bottom');
+        }
+      }, 500);
+
+      // Check completed
+      if (savedPuz) {
+        revealCompletedPuzzleState(savedPuz);
+      }
+      updateActiveStars();
+    }
+
+    // Render dashes
+    function renderBlanks(position, answer) {
+      const container = document.getElementById(`${position}-blanks`);
+      container.innerHTML = '';
+      
+      const words = answer.split(' ');
+      words.forEach((word) => {
+        const wordRow = document.createElement('div');
+        wordRow.className = 'word-row';
+        
+        for (let char of word) {
+          const tile = document.createElement('div');
+          tile.className = 'letter-tile';
+          
+          const upperChar = char.toUpperCase();
+          const isAlphanumeric = /[A-Z0-9]/.test(upperChar);
+          
+          if (!isAlphanumeric) {
+            tile.classList.add('punctuation');
+            tile.innerText = upperChar;
+            tile.classList.add('filled'); // Mark as filled so it renders immediately
+          }
+          
+          wordRow.appendChild(tile);
+        }
+        container.appendChild(wordRow);
+      });
+    }
+
+    // Sync input letters
+    function syncInputToTiles(position, value) {
+      const container = document.getElementById(`${position}-blanks`);
+      const tiles = container.querySelectorAll('.letter-tile');
+      const textChars = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      let textIndex = 0;
+
+      tiles.forEach(tile => {
+        if (tile.classList.contains('punctuation')) {
+          // Skip punctuation tiles: they are pre-filled and never edited
+          return;
+        }
+        
+        if (textIndex < textChars.length) {
+          tile.innerText = textChars[textIndex];
+          tile.classList.add('filled');
+          textIndex++;
+        } else {
+          tile.innerText = '';
+          tile.classList.remove('filled');
+        }
+      });
+    }
+
+    function updateActiveCursor(position) {
+      const container = document.getElementById(`${position}-blanks`);
+      const tiles = container.querySelectorAll('.letter-tile');
+      
+      tiles.forEach(tile => tile.classList.remove('cursor'));
+      
+      if (state[`${position}Solved`]) return;
+      
+      const inputEl = document.getElementById(`${position}-guess-input`);
+      const isFocused = document.activeElement === inputEl;
+      
+      if (isFocused) {
+        const value = inputEl.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        const currentLength = value.length;
+        
+        const alphanumericTiles = Array.from(tiles).filter(tile => !tile.classList.contains('punctuation'));
+        if (currentLength < alphanumericTiles.length) {
+          alphanumericTiles[currentLength].classList.add('cursor');
+        }
+      }
+    }
+
+    function checkGuess(position, isExplicitSubmit = false) {
+      const puz = state.activePuzzle;
+      if (!puz) return;
+
+      const answer = puz[position].answer;
+      const inputEl = document.getElementById(`${position}-guess-input`);
+      const wrapper = document.getElementById(`${position}-wrapper`);
+      const userGuess = inputEl.value;
+
+      const isCorrect = normalize(userGuess) === normalize(answer);
+
+      if (isCorrect) {
+        state[`${position}Solved`] = true;
+        wrapper.className = 'blanks-wrapper correct';
+        inputEl.disabled = true;
+        
+        fillAllTilesCorrectly(position, answer);
+        sounds.playSuccess();
+
+        // Immediately disable and dull the associated clue button
+        if (position === 'top') {
+          document.getElementById('btn-reveal-hint-1').disabled = true;
+        } else if (position === 'bottom') {
+          document.getElementById('btn-reveal-hint-2').disabled = true;
+        }
+
+        // Dynamically enable the Reveal Answer button if all unsolved parts have had clues revealed
+        const canGiveUp = (state.hint1Revealed || state.topSolved) && (state.hint2Revealed || state.bottomSolved);
+        document.getElementById('btn-giveup').disabled = !canGiveUp;
+
+        if (position === 'top' && !state.bottomSolved) {
+          document.getElementById('bottom-guess-input').focus();
+          updateActiveCursor('bottom');
+        } else if (position === 'bottom' && !state.topSolved) {
+          document.getElementById('top-guess-input').focus();
+          updateActiveCursor('top');
+        }
+
+        if (state.topSolved && state.bottomSolved) {
+          handleFinalPuzzleSolve();
+        }
+      } else if (isExplicitSubmit) {
+        wrapper.classList.add('incorrect');
+        sounds.playError();
+        setTimeout(() => {
+          wrapper.classList.remove('incorrect');
+        }, 500);
+      }
+    }
+
+    function fillAllTilesCorrectly(position, answer) {
+      const container = document.getElementById(`${position}-blanks`);
+      const tiles = container.querySelectorAll('.letter-tile');
+      const answerChars = answer.toUpperCase().replace(/\s/g, '');
+
+      tiles.forEach((tile, index) => {
+        if (index < answerChars.length) {
+          if (!tile.classList.contains('punctuation')) {
+            tile.innerText = answerChars[index];
+          }
+          tile.classList.add('filled');
+        }
+      });
+    }
+
+    function revealCompletedPuzzleState(savedData) {
+      state.topSolved = true;
+      state.bottomSolved = true;
+      state.hintsUsed = savedData.stars === 3 ? 0 : savedData.stars === 2 ? 1 : 2;
+      
+      document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
+      document.getElementById('top-guess-input').disabled = true;
+      document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
+      fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
+
+      document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
+      document.getElementById('bottom-guess-input').disabled = true;
+      document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+      fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
+
+      // Disable clue buttons and hide the Reveal Answer button entirely
+      const h1Btn = document.getElementById('btn-reveal-hint-1');
+      const h2Btn = document.getElementById('btn-reveal-hint-2');
+      h1Btn.disabled = true;
+      h2Btn.disabled = true;
+      
+      document.getElementById('btn-giveup').style.display = 'none';
+
+      // Automatically reveal both clues on screen for revisited completed puzzles
+      state.hint1Revealed = true;
+      state.hint2Revealed = true;
+      h1Btn.className = "btn btn-primary btn-clue revealed";
+      h1Btn.innerText = state.activePuzzle.top.clue;
+      h2Btn.className = "btn btn-primary btn-clue revealed";
+      h2Btn.innerText = state.activePuzzle.bottom.clue;
+    }
+
+    function updateActiveStars() {
+      const starsIndicator = document.getElementById('game-completed-stars');
+      if (!starsIndicator) return;
+      
+      starsIndicator.style.visibility = 'visible';
+      
+      if (state.activePuzzle) {
+        const completedPuz = state.stats.completedPuzzles[state.activePuzzle.date];
+        if (completedPuz) {
+          const stars = completedPuz.stars;
+          starsIndicator.innerText = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+        } else {
+          if (state.isGaveUp) {
+            starsIndicator.innerText = '☆☆☆';
+          } else {
+            const stars = Math.max(1, 3 - state.hintsUsed);
+            starsIndicator.innerText = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+          }
+        }
+      }
+    }
+
+    function animateStarDeduction(amount) {
+      const badge = document.getElementById('stars-deduction-badge');
+      if (!badge) return;
+      
+      badge.innerText = `-${amount}`;
+      
+      // Cancel any ongoing animations on the badge
+      if (badge.activeAnimation) {
+        badge.activeAnimation.cancel();
+      }
+      
+      // Animate: pop in, slide up, fade out quickly
+      badge.activeAnimation = badge.animate([
+        { transform: 'translateY(10px) scale(0.5)', opacity: 0 },
+        { transform: 'translateY(0) scale(1.3)', opacity: 1, offset: 0.2 },
+        { transform: 'translateY(-4px) scale(1)', opacity: 1, offset: 0.4 },
+        { transform: 'translateY(-24px) scale(0.85)', opacity: 0 }
+      ], {
+        duration: 900,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+        fill: 'forwards'
+      });
+    }
+
+    function revealHint(hintNum) {
+      sounds.playClick();
+      
+      if (hintNum === 1 && !state.hint1Revealed) {
+        state.hint1Revealed = true;
+        state.hintsUsed++;
+        
+        const h1Btn = document.getElementById('btn-reveal-hint-1');
+        h1Btn.classList.add('revealed');
+        h1Btn.innerText = state.activePuzzle.top.clue;
+        
+        // Trigger red minus star pop animation!
+        animateStarDeduction(1);
+      } 
+      else if (hintNum === 2 && !state.hint2Revealed) {
+        state.hint2Revealed = true;
+        state.hintsUsed++;
+        
+        const h2Btn = document.getElementById('btn-reveal-hint-2');
+        h2Btn.classList.add('revealed');
+        h2Btn.innerText = state.activePuzzle.bottom.clue;
+        
+        // Trigger red minus star pop animation!
+        animateStarDeduction(1);
+      }
+
+      // Update active stars tracker
+      updateActiveStars();
+
+      // Enable reveal answer button when all available/needed hints are revealed or solved
+      const canGiveUp = (state.hint1Revealed || state.topSolved) && (state.hint2Revealed || state.bottomSolved);
+      const giveUpBtn = document.getElementById('btn-giveup');
+      if (canGiveUp) {
+        giveUpBtn.disabled = false;
+        giveUpBtn.innerText = "Reveal Answer";
+      } else {
+        giveUpBtn.disabled = true;
+      }
+
+      savePartialProgress(); // Save revealed hint states
+    }
+
+    function surrenderPuzzle() {
+      if (confirm("Are you sure you want to reveal the answer? This gives 0 stars for today.")) {
+        state.isGaveUp = true;
+        state.topSolved = true;
+        state.bottomSolved = true;
+        
+        fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
+        fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
+        
+        document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
+        document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+        
+        document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
+        document.getElementById('top-guess-input').disabled = true;
+        document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
+        document.getElementById('bottom-guess-input').disabled = true;
+        
+        const h1Btn = document.getElementById('btn-reveal-hint-1');
+        const h2Btn = document.getElementById('btn-reveal-hint-2');
+        h1Btn.disabled = true;
+        h2Btn.disabled = true;
+        state.hint1Revealed = true;
+        state.hint2Revealed = true;
+        h1Btn.className = "btn btn-primary btn-clue revealed";
+        h1Btn.innerText = state.activePuzzle.top.clue;
+        h2Btn.className = "btn btn-primary btn-clue revealed";
+        h2Btn.innerText = state.activePuzzle.bottom.clue;
+        
+        document.getElementById('btn-giveup').style.display = 'none';
+        
+        sounds.playError();
+        
+        const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
+        const puzzleResults = {
+          solved: true,
+          stars: 0,
+          timeTaken: timeTaken,
+          date: state.activePuzzle.date
+        };
+        
+        state.stats.played++;
+        state.stats.completedPuzzles[state.activePuzzle.date] = puzzleResults;
+        state.stats.streak = 0;
+        
+        saveStatsAndProgress();
+        
+        // Trigger red minus star pop animation for all remaining active stars!
+        const starsBeforeSurrender = Math.max(1, 3 - state.hintsUsed);
+        animateStarDeduction(starsBeforeSurrender);
+        
+        updateActiveStars();
+        
+        setTimeout(() => {
+          showResultsModal(puzzleResults);
+        }, 800);
+      }
+    }
+
+    function handleFinalPuzzleSolve() {
+      const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
+      
+      let stars = 3;
+      if (state.hintsUsed === 1) stars = 2;
+      else if (state.hintsUsed >= 2) stars = 1;
+      
+      const puzzleResults = {
+        solved: true,
+        stars: stars,
+        timeTaken: timeTaken,
+        date: state.activePuzzle.date
+      };
+
+      if (!state.stats.completedPuzzles[state.activePuzzle.date]) {
+        state.stats.played++;
+        state.stats.won++;
+        state.stats.stars += stars;
+        state.stats.streak++;
+        if (state.stats.streak > state.stats.maxStreak) {
+          state.stats.maxStreak = state.stats.streak;
+        }
+        
+        state.stats.completedPuzzles[state.activePuzzle.date] = puzzleResults;
+        saveStatsAndProgress();
+      }
+
+      updateActiveStars();
+
+      sounds.playCelebrate();
+      // Synchronously reveal both clues and hide the Reveal Answer button entirely upon solving
+      const h1Btn = document.getElementById('btn-reveal-hint-1');
+      const h2Btn = document.getElementById('btn-reveal-hint-2');
+      h1Btn.disabled = true;
+      h2Btn.disabled = true;
+      state.hint1Revealed = true;
+      state.hint2Revealed = true;
+      h1Btn.className = "btn btn-primary btn-clue revealed";
+      h1Btn.innerText = state.activePuzzle.top.clue;
+      h2Btn.className = "btn btn-primary btn-clue revealed";
+      h2Btn.innerText = state.activePuzzle.bottom.clue;
+
+      document.getElementById('btn-giveup').style.display = 'none';
+
+      setTimeout(() => {
+        showResultsModal(puzzleResults);
+      }, 600);
+    }
+
+    function showResultsModal(results) {
+      const titleEl = document.getElementById('results-modal-title');
+      if (results.stars === 3) titleEl.innerText = "SMA-MAZING!!!";
+      else if (results.stars === 2) titleEl.innerText = "SMA-WESOME!";
+      else if (results.stars === 1) titleEl.innerText = "SMA-LRIGHT!";
+      else titleEl.innerText = "SMA-LMOST!";
+
+      const hintsEl = document.getElementById('results-hints-revealed');
+      if (results.stars === 0) {
+        hintsEl.innerText = "Answer revealed";
+      } else {
+        hintsEl.innerText = `${state.hintsUsed}/2 hints revealed`;
+      }
+
+      // First, remove animation classes and trigger states from all stars to reset their animations
+      for (let i = 1; i <= 3; i++) {
+        const star = document.getElementById(`results-star-${i}`);
+        star.classList.remove('active', 'inactive');
+        star.style.animation = 'none';
+        void star.offsetWidth; // Force reflow
+      }
+
+      // Helper function to create premium particle burst effect around the star
+      function createStarParticles(starEl) {
+        const rect = starEl.getBoundingClientRect();
+        const parent = starEl.parentElement;
+        const parentRect = parent.getBoundingClientRect();
+        
+        const starCenterX = rect.left - parentRect.left + rect.width / 2;
+        const starCenterY = rect.top - parentRect.top + rect.height / 2;
+        
+        const colors = ['#fbbf24', '#38bdf8', '#818cf8', '#ec4899', '#10b981'];
+        const numParticles = 12; // satisfying explosion density
+        
+        for (let i = 0; i < numParticles; i++) {
+          const particle = document.createElement('div');
+          particle.style.borderRadius = Math.random() > 0.4 ? '50%' : '2px';
+          const size = Math.random() * 6 + 4; // 4px to 10px
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          particle.style.position = 'absolute';
+          particle.style.left = `${starCenterX - size / 2}px`;
+          particle.style.top = `${starCenterY - size / 2}px`;
+          particle.style.pointerEvents = 'none';
+          particle.style.zIndex = '100';
+          
+          const angle = (i * (360 / numParticles) + Math.random() * 20) * (Math.PI / 180);
+          const distance = Math.random() * 30 + 40; // 40px to 70px
+          
+          const destinationX = Math.cos(angle) * distance;
+          const destinationY = Math.sin(angle) * distance;
+          
+          parent.appendChild(particle);
+          
+          particle.animate([
+            { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${destinationX}px, ${destinationY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+          ], {
+            duration: 650 + Math.random() * 150,
+            easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
+            fill: 'forwards'
+          });
+          
+          setTimeout(() => {
+            particle.remove();
+          }, 850);
+        }
+      }
+
+      // Then, add the active/inactive class with sequential delays for a premium cascading bouncy pop-in!
+      for (let i = 1; i <= 3; i++) {
+        const star = document.getElementById(`results-star-${i}`);
+        const isActive = i <= results.stars;
+        star.innerText = isActive ? '★' : '☆';
+        
+        setTimeout(() => {
+          star.style.animation = ''; // restore animation property
+          if (isActive) {
+            star.style.animation = 'starActivePop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+            star.classList.add('active');
+            createStarParticles(star);
+          } else {
+            star.style.animation = 'starInactivePop 0.45s ease-out forwards';
+            star.classList.add('inactive');
+          }
+          
+          // Play a satisfying click-pop synthesizer chime on each star pop!
+          if (typeof sounds !== 'undefined' && sounds.playClick) {
+            sounds.playClick();
+          }
+        }, 350 + (i - 1) * 200); // 350ms delay for modal pop-in to complete first, then 200ms cascade delay per star!
+      }
+
+      document.getElementById('results-top-value').innerText = state.activePuzzle.top.answer;
+      document.getElementById('results-connector-value').innerText = state.activePuzzle.connector;
+      document.getElementById('results-bottom-value').innerText = state.activePuzzle.bottom.answer;
+
+      // Populate hints clues list inside results modal
+      document.getElementById('results-hint-1-value').innerText = state.activePuzzle.top.clue;
+      document.getElementById('results-hint-2-value').innerText = state.activePuzzle.bottom.clue;
+
+      document.getElementById('stats-played').innerText = state.stats.played;
+      const pct = state.stats.played > 0 ? Math.round((state.stats.won / state.stats.played) * 100) : 0;
+      document.getElementById('stats-winpct').innerText = `${pct}%`;
+      document.getElementById('stats-streak').innerText = state.stats.streak;
+      
+      const avg = state.stats.played > 0 ? (state.stats.stars / state.stats.played).toFixed(1) : "0.0";
+      document.getElementById('stats-stars').innerHTML = 
+        `<span style="line-height: 1; display: inline-flex; align-items: center;">${avg}</span><span style="color: #fbbf24; font-size: 1.2rem; margin-left: 3px; display: inline-flex; align-items: center; line-height: 1;">★</span>`;
+
+      const modal = document.getElementById('modal-results');
+      modal.showModal();
+
+      document.getElementById('btn-results-share').onclick = () => {
+        const starText = "⭐".repeat(results.stars) + "▪️".repeat(3 - results.stars);
+        const dayDiff = Math.floor((new Date(results.date) - new Date("2026-05-27")) / 86400000) + 1;
+        const shareText = `🧩 SmashXUps • Day ${dayDiff} 🧩\nConnector: [${state.activePuzzle.connector}]\nRating: ${starText} (${results.stars}/3 Stars)\nTime: ${formatTime(results.timeTaken)}\n\nPlay here: https://smashxups.com 💜`;
+        
+        navigator.clipboard.writeText(shareText).then(() => {
+          const shareBtn = document.getElementById('btn-results-share');
+          const originalHtml = shareBtn.innerHTML;
+          shareBtn.innerHTML = "✓ Copied to Clipboard!";
+          shareBtn.style.background = "var(--color-correct)";
+          
+          setTimeout(() => {
+            shareBtn.innerHTML = originalHtml;
+            shareBtn.style.background = "";
+          }, 2000);
+        });
+      };
+
+
+    }
+
+    function renderArchiveScreen() {
+      const container = document.getElementById('archive-items-container');
+      container.innerHTML = '';
+
+      const todayStr = getTodayDateString();
+
+      state.puzzlesList.forEach((puzzle, index) => {
+        const isCompleted = state.stats.completedPuzzles[puzzle.date];
+        const isToday = puzzle.date === todayStr;
+        const isFuture = new Date(puzzle.date) > new Date(todayStr);
+
+        const item = document.createElement('div');
+        item.className = 'archive-item';
+        
+        if (isFuture) {
+          item.style.opacity = '0.5';
+          item.style.cursor = 'not-allowed';
+        }
+
+        const info = document.createElement('div');
+        info.className = 'archive-info';
+        
+        const dayNum = index + 1;
+        const dayTitle = document.createElement('span');
+        dayTitle.className = 'archive-day';
+        dayTitle.innerText = `Day ${dayNum}: ${puzzle.top.category} + ${puzzle.bottom.category}`;
+        
+        const dateLabel = document.createElement('span');
+        dateLabel.className = 'archive-date';
+        dateLabel.innerText = `${puzzle.date} ${isToday ? '• TODAY' : ''}`;
+
+        info.appendChild(dayTitle);
+        info.appendChild(dateLabel);
+
+        const status = document.createElement('div');
+        status.className = 'archive-status';
+
+        if (isCompleted) {
+          const starsCount = isCompleted.stars;
+          const starsSpan = document.createElement('span');
+          starsSpan.className = 'archive-stars';
+          starsSpan.innerText = '★'.repeat(starsCount) + '☆'.repeat(3 - starsCount);
+          status.appendChild(starsSpan);
+        } else if (isFuture) {
+          status.innerHTML = `<span class="archive-locked">🔒 Locked</span>`;
+        } else {
+          status.innerHTML = `<span style="color: var(--primary-accent); font-weight:600;">Play 🧩</span>`;
+        }
+
+        item.appendChild(info);
+        item.appendChild(status);
+
+        if (!isFuture) {
+          item.onclick = () => {
+            savePartialProgress();
+            setupPuzzleGame(puzzle);
+            navigateTo('game');
+          };
+        }
+
+        container.appendChild(item);
+      });
+    }
+
+    function setupSettingsHandlers() {
+      const toggleTheme = document.getElementById('setting-toggle-theme');
+
+      state.theme = localStorage.getItem('smash_theme') || 'light';
+
+      document.body.setAttribute('data-theme', state.theme);
+      toggleTheme.checked = state.theme === 'dark';
+
+      toggleTheme.onchange = (e) => {
+        state.theme = e.target.checked ? 'dark' : 'light';
+        localStorage.setItem('smash_theme', state.theme);
+        document.body.setAttribute('data-theme', state.theme);
+      };
+    }
+
+    // Dynamic visual viewport adjustment to push bottom buttons up when virtual keyboard opens on mobile
+    function adjustForVisualViewport() {
+      if (!window.visualViewport) return;
+      
+      const updateViewportHeight = () => {
+        const vh = window.visualViewport.height;
+        const appContainer = document.getElementById('app-container');
+        if (appContainer) {
+          appContainer.style.height = `${vh}px`;
+          appContainer.style.minHeight = `${vh}px`;
+          window.scrollTo(0, 0);
+        }
+      };
+
+      window.visualViewport.addEventListener('resize', updateViewportHeight);
+      window.visualViewport.addEventListener('scroll', updateViewportHeight);
+      updateViewportHeight();
+    }
+
+    // DOM initializer
+    document.addEventListener('DOMContentLoaded', () => {
+      adjustForVisualViewport();
+      setupSettingsHandlers();
+      loadStatsAndProgress();
+
+      const todayStr = getTodayDateString();
+      let todayPuzzle = state.puzzlesList.find(p => p.date === todayStr);
+      if (!todayPuzzle) todayPuzzle = state.puzzlesList[0];
+
+      setupPuzzleGame(todayPuzzle);
+
+      // Bind date navigation arrows
+      document.getElementById('nav-date-back').onclick = () => {
+        sounds.playClick();
+        savePartialProgress();
+        const currentIndex = state.puzzlesList.findIndex(p => p.date === state.activePuzzle.date);
+        if (currentIndex > 0) {
+          setupPuzzleGame(state.puzzlesList[currentIndex - 1]);
+        }
+      };
+
+      document.getElementById('nav-date-forward').onclick = () => {
+        sounds.playClick();
+        savePartialProgress();
+        const currentIndex = state.puzzlesList.findIndex(p => p.date === state.activePuzzle.date);
+        const todayStr = getTodayDateString();
+        const nextPuzzle = state.puzzlesList[currentIndex + 1];
+        const isNextFuture = nextPuzzle && nextPuzzle.date > todayStr;
+        if (currentIndex < state.puzzlesList.length - 1 && !isNextFuture) {
+          setupPuzzleGame(nextPuzzle);
+        }
+      };
+
+      // Bind buttons
+      document.getElementById('nav-btn-archive').onclick = () => {
+        savePartialProgress();
+        navigateTo('archive');
+      };
+      document.getElementById('nav-btn-settings').onclick = () => {
+        savePartialProgress();
+        navigateTo('settings');
+      };
+      
+      document.getElementById('nav-btn-how').onclick = () => {
+        sounds.playClick();
+        savePartialProgress();
+        const dontShowRules = localStorage.getItem('smash_dont_show_rules') === 'true';
+        document.getElementById('how-to-play-dontshow').checked = dontShowRules;
+        document.getElementById('modal-how-to-play').showModal();
+      };
+
+      document.getElementById('logo-home').onclick = () => {
+        savePartialProgress();
+        navigateTo('game');
+        setupPuzzleGame(state.activePuzzle || todayPuzzle);
+      };
+
+      document.getElementById('btn-test-reset-all').onclick = () => {
+        sounds.playClick();
+        if (confirm("🧪 TESTING RESET:\n\nThis will completely reset all game statistics, streaks, stars, completed puzzle records, and partial progress.\n\nAre you sure you want to do this?")) {
+          localStorage.removeItem(getStatsLocalStorageKey());
+          localStorage.removeItem('smash_dont_show_rules');
+          alert("Game successfully reset! The page will now reload to initialize a fresh guest profile. 🧩");
+          window.location.reload();
+        }
+      };
+
+      // How to Play modal auxiliary controls
+      const dontShowCheckbox = document.getElementById('how-to-play-dontshow');
+      dontShowCheckbox.onchange = (e) => {
+        localStorage.setItem('smash_dont_show_rules', e.target.checked ? 'true' : 'false');
+      };
+
+      document.getElementById('how-to-play-login-link').onclick = (e) => {
+        e.preventDefault();
+        sounds.playClick();
+        alert("Account login, profiles, and cross-device stats syncing are coming soon in Phase 2! For now, your stats and progress are securely saved locally on this browser. 🧩");
+      };
+
+      // Synchronous modal closer that closes the dialog first, letting native focus-restoration run, and then shifts focus synchronously and asynchronously to completely avoid keyboard blocks
+      window.closeHowToPlayModal = function(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (typeof sounds !== 'undefined' && sounds.playClick) {
+          sounds.playClick();
+        }
+        
+        // Close the dialog first (natively restores focus to triggering element or body)
+        document.getElementById('modal-how-to-play').close();
+        
+        const topInput = document.getElementById('top-guess-input');
+        const bottomInput = document.getElementById('bottom-guess-input');
+        
+        const doFocusShift = () => {
+          if (!state.topSolved) {
+            topInput.focus();
+            updateActiveCursor('top');
+          } else if (!state.bottomSolved) {
+            bottomInput.focus();
+            updateActiveCursor('bottom');
+          }
+        };
+        
+        // 1. Synchronously focus (helps raise mobile keyboard)
+        doFocusShift();
+        
+        // 2. Asynchronously focus after 100ms (locks focus on desktop Safari/Chrome after native close microtasks complete)
+        setTimeout(() => {
+          doFocusShift();
+        }, 100);
+      };
+
+      // Fallback close event listener for escape key (Esc) dismissals
+      document.getElementById('modal-how-to-play').addEventListener('close', () => {
+        setTimeout(() => {
+          // Only focus if the inputs aren't already active (prevents double-focusing conflicts)
+          const topInput = document.getElementById('top-guess-input');
+          const bottomInput = document.getElementById('bottom-guess-input');
+          if (document.activeElement !== topInput && document.activeElement !== bottomInput) {
+            if (!state.topSolved) {
+              topInput.focus();
+              updateActiveCursor('top');
+            } else if (!state.bottomSolved) {
+              bottomInput.focus();
+              updateActiveCursor('bottom');
+            }
+          }
+        }, 50);
+      });
+
+      // Click card wrapper triggers hidden inputs focuses
+      document.getElementById('top-wrapper').onclick = (e) => {
+        if (e.target.closest('button') || e.target.closest('input')) return;
+        if (state.topSolved) return;
+        document.getElementById('top-guess-input').focus();
+        updateActiveCursor('top');
+      };
+
+      document.getElementById('bottom-wrapper').onclick = (e) => {
+        if (e.target.closest('button') || e.target.closest('input')) return;
+        if (state.bottomSolved) return;
+        document.getElementById('bottom-guess-input').focus();
+        updateActiveCursor('bottom');
+      };
+
+      document.getElementById('btn-reveal-hint-1').onclick = () => revealHint(1);
+      document.getElementById('btn-reveal-hint-2').onclick = () => revealHint(2);
+      document.getElementById('btn-giveup').onclick = () => surrenderPuzzle();
+
+      // Help onboarding automatically triggers on load, unless they opt out
+      const dontShowRules = localStorage.getItem('smash_dont_show_rules');
+      dontShowCheckbox.checked = (dontShowRules === 'true');
+      
+      if (dontShowRules !== 'true') {
+        setTimeout(() => {
+          document.getElementById('modal-how-to-play').showModal();
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
