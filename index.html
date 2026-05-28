@@ -458,16 +458,6 @@
       cursor: default;
     }
 
-    /* Large mockup buttons at the bottom */
-    .buttons-section {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: auto;
-      padding: 24px 0 12px 0;
-      width: 100%;
-    }
-
     .btn {
       font-family: var(--font-main);
       font-weight: 600;
@@ -510,7 +500,8 @@
     }
 
     .btn-reveal-answer {
-      min-height: 60px; /* Same height as clue buttons */
+      min-height: 52px;
+      margin-top: 24px;
     }
 
     /* Nested Card Clue Button Overrides */
@@ -1184,10 +1175,7 @@
         <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
       </div>
 
-      <!-- Large Screenshot rounded buttons -->
-      <div class="buttons-section">
-        <button class="btn btn-reveal-answer" id="btn-giveup" disabled>Reveal Answer</button>
-      </div>
+      <button class="btn btn-reveal-answer" id="btn-giveup" disabled>Reveal Answer</button>
 
     </main>
 
