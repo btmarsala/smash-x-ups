@@ -1480,12 +1480,19 @@
           </div>
         </div>
 
-        <!-- Sharing Button -->
-        <button class="btn btn-primary" id="btn-results-share" style="margin-top: 16px; gap: 8px;">
-          <!-- Share icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-          Share Result
-        </button>
+        <!-- Sharing & Navigation Actions -->
+        <div style="display: flex; gap: 12px; margin-top: 16px; width: 100%;">
+          <button class="btn btn-primary" id="btn-results-share" style="flex: 1; gap: 8px; margin-top: 0; padding: 14px 20px;">
+            <!-- Share icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            Share Result
+          </button>
+          <button class="btn btn-secondary" id="btn-results-play-another" style="flex: 1; gap: 8px; margin-top: 0; padding: 14px 20px;">
+            <!-- Play/Next icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Play another
+          </button>
+        </div>
 
 
 
@@ -2482,6 +2489,27 @@
           }, 2000);
         });
       };
+
+      // "Play another" button logic to take the user to the most recent unplayed puzzle
+      const todayStr = getTodayDateString();
+      const unplayedPuzzles = state.puzzlesList.filter(p => p.date <= todayStr && !state.stats.completedPuzzles[p.date]);
+      const playAnotherBtn = document.getElementById('btn-results-play-another');
+
+      if (unplayedPuzzles.length > 0) {
+        // Sort in descending order (most recent first)
+        unplayedPuzzles.sort((a, b) => b.date.localeCompare(a.date));
+        const nextUnplayed = unplayedPuzzles[0];
+        
+        playAnotherBtn.style.display = 'flex';
+        playAnotherBtn.onclick = () => {
+          sounds.playClick();
+          document.getElementById('modal-results').close();
+          setupPuzzleGame(nextUnplayed);
+        };
+      } else {
+        // Hide the button if all released puzzles have been completed
+        playAnotherBtn.style.display = 'none';
+      }
 
 
     }
