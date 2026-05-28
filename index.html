@@ -440,17 +440,17 @@
     /* Visually mask the inputs entirely: captures typing but sits unseen on top of the card wrapper */
     .text-input {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      width: 1px;
+      height: 1px;
       opacity: 0;
-      z-index: 10;
-      pointer-events: auto;
+      z-index: -1;
+      pointer-events: none; /* Flow swipe/drag gestures cleanly to the scroll wrapper */
       background: transparent;
       border: none;
       outline: none;
-      cursor: pointer;
+      font-size: 16px; /* Prevents iOS Safari from forcing auto-zoom on focus */
     }
 
     .text-input:disabled {
@@ -1326,7 +1326,7 @@
           <!-- Rendered dynamically -->
         </div>
         <!-- Masked focusable typing input -->
-        <input type="text" class="text-input" id="top-guess-input" placeholder="Type Top Guess..." aria-label="Top guess input">
+        <input type="text" class="text-input" id="top-guess-input" placeholder="Type Top Guess..." aria-label="Top guess input" autocorrect="off" autocapitalize="none" spellcheck="false" autocomplete="off">
         <button class="btn btn-primary btn-clue" id="btn-reveal-hint-1">Reveal Clue 1</button>
       </div>
 
@@ -1342,7 +1342,7 @@
           <!-- Rendered dynamically -->
         </div>
         <!-- Masked focusable typing input -->
-        <input type="text" class="text-input" id="bottom-guess-input" placeholder="Type Bottom Guess..." aria-label="Bottom guess input">
+        <input type="text" class="text-input" id="bottom-guess-input" placeholder="Type Bottom Guess..." aria-label="Bottom guess input" autocorrect="off" autocapitalize="none" spellcheck="false" autocomplete="off">
         <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
       </div>
 
@@ -1913,6 +1913,12 @@
       // Inputs setup
       const topInput = document.getElementById('top-guess-input');
       const bottomInput = document.getElementById('bottom-guess-input');
+
+      // Set maxLength based on clean alphanumeric character count
+      const topMax = puzzle.top.answer.toUpperCase().replace(/[^A-Z0-9]/g, '').length;
+      topInput.maxLength = topMax;
+      const bottomMax = puzzle.bottom.answer.toUpperCase().replace(/[^A-Z0-9]/g, '').length;
+      bottomInput.maxLength = bottomMax;
 
       topInput.value = partial ? (partial.topGuess || '') : '';
       topInput.disabled = state.topSolved;
