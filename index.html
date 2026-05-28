@@ -2103,12 +2103,16 @@
         const canGiveUp = (state.hint1Revealed || state.topSolved) && (state.hint2Revealed || state.bottomSolved);
         document.getElementById('btn-giveup').disabled = !canGiveUp;
 
-        if (position === 'top' && !state.bottomSolved) {
-          document.getElementById('bottom-guess-input').focus();
-          updateActiveCursor('bottom');
-        } else if (position === 'bottom' && !state.topSolved) {
-          document.getElementById('top-guess-input').focus();
-          updateActiveCursor('top');
+        if (window.innerWidth < 768) {
+          inputEl.blur();
+        } else {
+          if (position === 'top' && !state.bottomSolved) {
+            document.getElementById('bottom-guess-input').focus();
+            updateActiveCursor('bottom');
+          } else if (position === 'bottom' && !state.topSolved) {
+            document.getElementById('top-guess-input').focus();
+            updateActiveCursor('top');
+          }
         }
 
         if (state.topSolved && state.bottomSolved) {
