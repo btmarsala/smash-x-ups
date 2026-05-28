@@ -744,6 +744,55 @@
       pointer-events: none;
     }
 
+    /* Stars Tooltip Bubble Styles (Local Test) */
+    .stars-tooltip-bubble {
+      position: absolute;
+      top: 38px;
+      left: calc(50% - 120px);
+      z-index: 100;
+      width: 240px;
+      background: #ffffff;
+      border: 1.5px solid var(--primary-accent);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--text-dark);
+      text-align: center;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      animation: tooltipBounceIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      pointer-events: auto;
+    }
+    
+    [data-theme="dark"] .stars-tooltip-bubble {
+      background: #1e293b;
+      border-color: var(--primary-accent);
+      color: #f1f5f9;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .stars-tooltip-arrow {
+      position: absolute;
+      top: -6px;
+      left: calc(50% - 6px);
+      width: 10px;
+      height: 10px;
+      background: #ffffff;
+      border-left: 1.5px solid var(--primary-accent);
+      border-top: 1.5px solid var(--primary-accent);
+      transform: rotate(45deg);
+    }
+
+    [data-theme="dark"] .stars-tooltip-arrow {
+      background: #1e293b;
+    }
+
+    @keyframes tooltipBounceIn {
+      0% { transform: translateY(8px) scale(0.92); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
     .modal-header {
       display: flex;
       justify-content: space-between;
@@ -1236,6 +1285,14 @@
         <div id="game-completed-stars" style="display: flex; justify-content: center; gap: 4px; font-size: 1.5rem; color: #fbbf24; font-family: var(--font-display); letter-spacing: 0.1em; user-select: none; margin: 0;">★★★</div>
         <!-- Red minus indicator that pops and floats upward -->
         <div id="stars-deduction-badge" style="position: absolute; left: calc(50% + 45px); color: #dc2626; font-size: 1.4rem; font-weight: 800; font-family: var(--font-display); opacity: 0; pointer-events: none; user-select: none;">-1</div>
+
+        <!-- Stars Tooltip Popup (Local Test) -->
+        <div id="stars-tooltip" class="stars-tooltip-bubble" style="display: none;">
+          <div class="stars-tooltip-arrow"></div>
+          <div class="stars-tooltip-content">
+            You start with 3 stars. Each clue subtracts a star.
+          </div>
+        </div>
       </div>
 
       <!-- Top Puzzle Card Wrapper -->
@@ -2615,6 +2672,7 @@
         if (confirm("🧪 TESTING RESET:\n\nThis will completely reset all game statistics, streaks, stars, completed puzzle records, and partial progress.\n\nAre you sure you want to do this?")) {
           localStorage.removeItem(getStatsLocalStorageKey());
           localStorage.removeItem('smash_dont_show_rules');
+          localStorage.removeItem('smash_seen_stars_tooltip');
           alert("Game successfully reset! The page will now reload to initialize a fresh guest profile. 🧩");
           window.location.reload();
         }
@@ -2632,6 +2690,28 @@
         alert("Account login, profiles, and cross-device stats syncing are coming soon in Phase 2! For now, your stats and progress are securely saved locally on this browser. 🧩");
       };
 
+      // Show first-time stars explanation tooltip (Local Test)
+      function showStarsTooltip() {
+        const tooltip = document.getElementById('stars-tooltip');
+        if (!tooltip) return;
+        
+        if (localStorage.getItem('smash_seen_stars_tooltip') === 'true') return;
+        
+        tooltip.style.display = 'block';
+        
+        // Delay listener registration slightly so the closing click of "Let's Smash!" doesn't immediately dismiss it
+        setTimeout(() => {
+          const dismissListener = function(event) {
+            tooltip.style.display = 'none';
+            localStorage.setItem('smash_seen_stars_tooltip', 'true');
+            document.removeEventListener('click', dismissListener);
+            document.removeEventListener('touchstart', dismissListener);
+          };
+          document.addEventListener('click', dismissListener);
+          document.addEventListener('touchstart', dismissListener);
+        }, 100);
+      }
+
       // Synchronous modal closer that closes the dialog first, letting native focus-restoration run, and then shifts focus synchronously and asynchronously to completely avoid keyboard blocks
       window.closeHowToPlayModal = function(e) {
         if (e) {
@@ -2644,6 +2724,9 @@
         
         // Close the dialog first (natively restores focus to triggering element or body)
         document.getElementById('modal-how-to-play').close();
+        
+        // Show stars explanation tooltip if first time
+        showStarsTooltip();
         
         const topInput = document.getElementById('top-guess-input');
         const bottomInput = document.getElementById('bottom-guess-input');
@@ -2669,6 +2752,9 @@
 
       // Fallback close event listener for escape key (Esc) dismissals
       document.getElementById('modal-how-to-play').addEventListener('close', () => {
+        // Show stars explanation tooltip if first time
+        showStarsTooltip();
+
         setTimeout(() => {
           // Only focus if the inputs aren't already active (prevents double-focusing conflicts)
           const topInput = document.getElementById('top-guess-input');
