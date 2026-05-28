@@ -966,12 +966,14 @@
     .archive-day {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      color: var(--text-dark);
     }
 
     .archive-date {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
+      font-weight: 400;
     }
 
     .archive-status {
@@ -1143,6 +1145,15 @@
     <section class="screen" id="screen-archive">
       <h2 style="font-family: var(--font-display); margin: 20px 0 8px 0;">Puzzle Archive</h2>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Play past daily challenges. Your stars and streaks are saved!</p>
+      
+      <!-- Archive Filters -->
+      <div class="archive-filter-row" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; user-select: none;">
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-main); cursor: pointer;">
+          <input type="checkbox" id="archive-unsolved-only" style="width: 18px; height: 18px; border-radius: var(--radius-sm); accent-color: var(--primary-accent); cursor: pointer;">
+          Show unsolved only
+        </label>
+      </div>
+
       <div class="archive-list" id="archive-items-container">
         <!-- Loaded dynamically -->
       </div>
@@ -2261,31 +2272,57 @@
       container.innerHTML = '';
 
       const todayStr = getTodayDateString();
+      const showUnsolvedOnly = document.getElementById('archive-unsolved-only').checked;
 
-      state.puzzlesList.forEach((puzzle, index) => {
+      // Filter puzzles to today and past puzzles only
+      let filteredPuzzles = state.puzzlesList.filter(puzzle => puzzle.date <= todayStr);
+
+      // Filter to unsolved only if checkbox checked
+      if (showUnsolvedOnly) {
+        filteredPuzzles = filteredPuzzles.filter(puzzle => !state.stats.completedPuzzles[puzzle.date]);
+      }
+
+      // Sort: newest at top to oldest (reverse chronological)
+      filteredPuzzles.sort((a, b) => b.date.localeCompare(a.date));
+
+      if (filteredPuzzles.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-main);">
+            No puzzles found!
+          </div>
+        `;
+        return;
+      }
+
+      filteredPuzzles.forEach((puzzle) => {
         const isCompleted = state.stats.completedPuzzles[puzzle.date];
         const isToday = puzzle.date === todayStr;
-        const isFuture = new Date(puzzle.date) > new Date(todayStr);
 
         const item = document.createElement('div');
         item.className = 'archive-item';
-        
-        if (isFuture) {
-          item.style.opacity = '0.5';
-          item.style.cursor = 'not-allowed';
-        }
 
         const info = document.createElement('div');
         info.className = 'archive-info';
         
-        const dayNum = index + 1;
+        // Format the date as MM-DD-YY
+        const parts = puzzle.date.split('-');
+        let formattedDate = puzzle.date;
+        if (parts.length === 3) {
+          const year = parts[0].slice(-2);
+          const month = parts[1];
+          const day = parts[2];
+          formattedDate = `${month}-${day}-${year}`;
+        }
+        
+        // Date is the larger bolder headline (archive-day)
         const dayTitle = document.createElement('span');
         dayTitle.className = 'archive-day';
-        dayTitle.innerText = `Day ${dayNum}: ${puzzle.top.category} + ${puzzle.bottom.category}`;
+        dayTitle.innerText = `${formattedDate}${isToday ? ' • TODAY' : ''}`;
         
+        // Categories is the smaller lighter text (archive-date)
         const dateLabel = document.createElement('span');
         dateLabel.className = 'archive-date';
-        dateLabel.innerText = `${puzzle.date} ${isToday ? '• TODAY' : ''}`;
+        dateLabel.innerText = `${puzzle.top.category} + ${puzzle.bottom.category}`;
 
         info.appendChild(dayTitle);
         info.appendChild(dateLabel);
@@ -2299,8 +2336,6 @@
           starsSpan.className = 'archive-stars';
           starsSpan.innerText = '★'.repeat(starsCount) + '☆'.repeat(3 - starsCount);
           status.appendChild(starsSpan);
-        } else if (isFuture) {
-          status.innerHTML = `<span class="archive-locked">🔒 Locked</span>`;
         } else {
           status.innerHTML = `<span style="color: var(--primary-accent); font-weight:600;">Play 🧩</span>`;
         }
@@ -2308,13 +2343,11 @@
         item.appendChild(info);
         item.appendChild(status);
 
-        if (!isFuture) {
-          item.onclick = () => {
-            savePartialProgress();
-            setupPuzzleGame(puzzle);
-            navigateTo('game');
-          };
-        }
+        item.onclick = () => {
+          savePartialProgress();
+          setupPuzzleGame(puzzle);
+          navigateTo('game');
+        };
 
         container.appendChild(item);
       });
@@ -2392,6 +2425,9 @@
       document.getElementById('nav-btn-archive').onclick = () => {
         savePartialProgress();
         navigateTo('archive');
+      };
+      document.getElementById('archive-unsolved-only').onchange = () => {
+        renderArchiveScreen();
       };
       document.getElementById('nav-btn-settings').onclick = () => {
         savePartialProgress();
