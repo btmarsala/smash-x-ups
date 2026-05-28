@@ -1608,10 +1608,11 @@
       // Render puzzle date & category texts
       const todayStr = getTodayDateString();
       const dateEl = document.getElementById('game-puzzle-date');
-      dateEl.innerText = formatPuzzleDate(puzzle.date);
       if (puzzle.date === todayStr) {
+        dateEl.innerText = "TODAY'S PUZZLE";
         dateEl.style.color = 'var(--color-correct)'; // Mint green when it's today's puzzle
       } else {
+        dateEl.innerText = formatPuzzleDate(puzzle.date);
         dateEl.style.color = '';
       }
 
