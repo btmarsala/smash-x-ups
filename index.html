@@ -1980,6 +1980,7 @@
 
       // Auto-focus first unsolved card instantly on desktop
       setTimeout(() => {
+        if (window.innerWidth < 768) return; // MOBILE GUARD: No keyboard popup on mobile screen
         if (!state.topSolved) {
           topInput.focus();
           updateActiveCursor('top');
@@ -2785,6 +2786,8 @@
         // Show stars explanation tooltip if first time
         showStarsTooltip();
         
+        if (window.innerWidth < 768) return; // MOBILE GUARD: No keyboard popup on mobile screen dismissal
+        
         const topInput = document.getElementById('top-guess-input');
         const bottomInput = document.getElementById('bottom-guess-input');
         
@@ -2811,6 +2814,8 @@
       document.getElementById('modal-how-to-play').addEventListener('close', () => {
         // Show stars explanation tooltip if first time
         showStarsTooltip();
+
+        if (window.innerWidth < 768) return; // MOBILE GUARD: No keyboard popup on mobile screen dismissal
 
         setTimeout(() => {
           // Only focus if the inputs aren't already active (prevents double-focusing conflicts)
