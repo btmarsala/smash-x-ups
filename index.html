@@ -623,6 +623,16 @@
       color: #f1f5f9;
     }
 
+    .example-connector {
+      font-weight: 800;
+      background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      display: inline-block;
+    }
+
     /* Standard Modal Styles (using native HTML5 <dialog>) */
     dialog {
       border: none;
@@ -1256,9 +1266,9 @@
         <p style="font-size: 1.05rem; font-weight: 600; color: var(--text-dark); margin-top: 8px; text-align: left;">Examples:</p>
         
         <ul style="list-style-type: disc; padding-left: 20px; margin: 4px 0 12px 0; display: flex; flex-direction: column; gap: 8px; font-size: 1.05rem; color: var(--text-main); text-align: left;">
-          <li>Larry <strong>KING</strong> Kong</li>
-          <li>Luke Sky<strong>WALKER</strong> Texas Ranger</li>
-          <li>Mambo Number <strong>FIVE</strong> Guys</li>
+          <li>Larry <strong class="example-connector">KING</strong> Kong</li>
+          <li>Luke Sky<strong class="example-connector">WALKER</strong> Texas Ranger</li>
+          <li>Mambo Number <strong class="example-connector">FIVE</strong> Guys</li>
         </ul>
 
         <p style="font-size: 1.05rem; line-height: 1.5; color: var(--text-main); text-align: left;">Stuck? Reveal a clue—but you'll lose a star.</p>
