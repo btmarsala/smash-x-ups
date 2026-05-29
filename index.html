@@ -1239,6 +1239,14 @@
       }
     }
 
+    @media (max-width: 768px) {
+      .results-stats-container {
+        display: none !important;
+      }
+      .results-stats-mobile-link {
+        display: flex !important;
+      }
+    }
 
   </style>
 </head>
@@ -1474,24 +1482,31 @@
         </div>
 
         <!-- User Stats Breakdown -->
-        <h3 style="font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Your Lifetime Stats</h3>
-        <div class="stats-grid" id="results-stats-grid">
-          <div class="stat-item">
-            <span class="stat-num" id="stats-played">0</span>
-            <span class="stat-label">Played</span>
+        <div class="results-stats-container">
+          <h3 style="font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Your Lifetime Stats</h3>
+          <div class="stats-grid" id="results-stats-grid">
+            <div class="stat-item">
+              <span class="stat-num" id="stats-played">0</span>
+              <span class="stat-label">Played</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" id="stats-winpct">0%</span>
+              <span class="stat-label">Win %</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" id="stats-streak">0</span>
+              <span class="stat-label">Streak</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num" id="stats-stars">0</span>
+              <span class="stat-label">Avg Stars</span>
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-num" id="stats-winpct">0%</span>
-            <span class="stat-label">Win %</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-num" id="stats-streak">0</span>
-            <span class="stat-label">Streak</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-num" id="stats-stars">0</span>
-            <span class="stat-label">Avg Stars</span>
-          </div>
+        </div>
+
+        <!-- Mobile view stats link -->
+        <div class="results-stats-mobile-link" style="display: none; justify-content: center; margin: 12px 0 20px 0; width: 100%;">
+          <a href="#" id="link-results-stats" style="color: var(--primary-accent); font-weight: 700; font-size: 0.92rem; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-display);">VIEW LIFETIME STATS</a>
         </div>
 
         <!-- Navigation Actions -->
@@ -2618,6 +2633,14 @@
         // Hide the button if all released puzzles have been completed
         playAnotherBtn.style.display = 'none';
       }
+
+      // Link to view stats in settings
+      document.getElementById('link-results-stats').onclick = (e) => {
+        e.preventDefault();
+        sounds.playClick();
+        document.getElementById('modal-results').close();
+        navigateTo('settings');
+      };
 
 
     }
