@@ -2568,16 +2568,29 @@
       state.hintsUsed = savedData.stars === 3 ? 0 : savedData.stars === 2 ? 1 : 2;
       
       const isGaveUp = savedData.gaveUp || (savedData.stars === 0);
-      const wrapperClass = isGaveUp ? 'blanks-wrapper revealed-incorrect' : 'blanks-wrapper correct';
+      
+      let topWrapperClass = 'blanks-wrapper correct';
+      let bottomWrapperClass = 'blanks-wrapper correct';
+      
+      if (isGaveUp) {
+        const topSolvedByUser = savedData.topSolvedByUser !== undefined ? savedData.topSolvedByUser : false;
+        if (!topSolvedByUser) {
+          topWrapperClass = 'blanks-wrapper revealed-incorrect';
+        }
+        const bottomSolvedByUser = savedData.bottomSolvedByUser !== undefined ? savedData.bottomSolvedByUser : false;
+        if (!bottomSolvedByUser) {
+          bottomWrapperClass = 'blanks-wrapper revealed-incorrect';
+        }
+      }
 
       document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
       document.getElementById('top-guess-input').disabled = true;
-      document.getElementById('top-wrapper').className = wrapperClass;
+      document.getElementById('top-wrapper').className = topWrapperClass;
       fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
 
       document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
       document.getElementById('bottom-guess-input').disabled = true;
-      document.getElementById('bottom-wrapper').className = wrapperClass;
+      document.getElementById('bottom-wrapper').className = bottomWrapperClass;
       fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
 
       // Disable clue buttons and hide the Reveal Answer button entirely
@@ -2689,6 +2702,9 @@
       const hint1NotRevealed = !state.hint1Revealed;
       const hint2NotRevealed = !state.hint2Revealed;
 
+      const topAlreadySolved = state.topSolved;
+      const bottomAlreadySolved = state.bottomSolved;
+
       state.isGaveUp = true;
       state.topSolved = true;
       state.bottomSolved = true;
@@ -2696,8 +2712,8 @@
       fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
       fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
       
-      document.getElementById('top-wrapper').className = 'blanks-wrapper revealed-incorrect';
-      document.getElementById('bottom-wrapper').className = 'blanks-wrapper revealed-incorrect';
+      document.getElementById('top-wrapper').className = topAlreadySolved ? 'blanks-wrapper correct' : 'blanks-wrapper revealed-incorrect';
+      document.getElementById('bottom-wrapper').className = bottomAlreadySolved ? 'blanks-wrapper correct' : 'blanks-wrapper revealed-incorrect';
       
       document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
       document.getElementById('top-guess-input').disabled = true;
@@ -2726,7 +2742,9 @@
         stars: 0,
         timeTaken: timeTaken,
         date: state.activePuzzle.date,
-        gaveUp: true
+        gaveUp: true,
+        topSolvedByUser: topAlreadySolved,
+        bottomSolvedByUser: bottomAlreadySolved
       };
       
       state.stats.played++;
