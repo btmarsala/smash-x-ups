@@ -511,6 +511,123 @@
       margin-top: 24px;
     }
 
+    /* Mobile-Only Swipe to Reveal Clue Styles */
+    .swipe-clue-container {
+      width: calc(100% + 48px) !important;
+      margin: 24px -24px 0 -24px !important;
+      display: none !important;
+      position: relative !important;
+      z-index: 12 !important;
+      height: 52px;
+    }
+
+    .swipe-track {
+      width: 100%;
+      height: 100%;
+      background: rgba(99, 102, 241, 0.05); /* Translucent soft purple track background */
+      border-top: 1.5px solid var(--card-border);
+      border-radius: 0 0 10.5px 10.5px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    [data-theme="dark"] .swipe-track {
+      background: rgba(129, 140, 248, 0.06);
+      border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .swipe-text {
+      font-family: var(--font-main);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary-accent);
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 1;
+      /* Dynamic shimmering shimmer effect */
+      background: linear-gradient(120deg, 
+        var(--primary-accent) 30%, 
+        #38bdf8 50%, 
+        var(--primary-accent) 70%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: swipe-shimmer 2.5s infinite linear;
+    }
+
+    [data-theme="dark"] .swipe-text {
+      background: linear-gradient(120deg, 
+        #818cf8 30%, 
+        #38bdf8 50%, 
+        #818cf8 70%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes swipe-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    .swipe-thumb {
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(to right, #38bdf8 0%, var(--primary-accent) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      cursor: grab;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+      z-index: 2;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .swipe-thumb:active {
+      cursor: grabbing;
+    }
+
+    .swipe-thumb.returning {
+      transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .swipe-arrow {
+      pointer-events: none;
+      transition: transform 0.2s;
+    }
+
+    .swipe-thumb:active .swipe-arrow {
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 767px) {
+      /* Only show swipe container if the wrapper is unsolved and the sibling button does NOT have .revealed class */
+      .blanks-wrapper:not(.correct) .btn-clue:not(.revealed) ~ .swipe-clue-container {
+        display: flex !important;
+      }
+      /* Hide standard btn-clue when the wrapper is unsolved and the clue is NOT revealed on mobile screen */
+      .blanks-wrapper:not(.correct) .btn-clue:not(.revealed) {
+        display: none !important;
+      }
+    }
+
     /* Nested Card Clue Button Overrides */
     .btn-clue {
       width: calc(100% + 48px) !important;
@@ -1319,6 +1436,14 @@
         <!-- Masked focusable typing input -->
         <input type="text" class="text-input" id="top-guess-input" placeholder="Type Top Guess..." aria-label="Top guess input" autocorrect="off" autocapitalize="none" spellcheck="false" autocomplete="off">
         <button class="btn btn-primary btn-clue" id="btn-reveal-hint-1">Reveal Clue 1</button>
+        <div class="swipe-clue-container" id="swipe-reveal-hint-1">
+          <div class="swipe-track">
+            <div class="swipe-thumb">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="swipe-arrow"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </div>
+            <span class="swipe-text">Swipe to reveal clue</span>
+          </div>
+        </div>
       </div>
 
       <!-- Connector Segment -->
@@ -1335,6 +1460,14 @@
         <!-- Masked focusable typing input -->
         <input type="text" class="text-input" id="bottom-guess-input" placeholder="Type Bottom Guess..." aria-label="Bottom guess input" autocorrect="off" autocapitalize="none" spellcheck="false" autocomplete="off">
         <button class="btn btn-primary btn-clue" id="btn-reveal-hint-2">Reveal Clue 2</button>
+        <div class="swipe-clue-container" id="swipe-reveal-hint-2">
+          <div class="swipe-track">
+            <div class="swipe-thumb">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="swipe-arrow"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </div>
+            <span class="swipe-text">Swipe to reveal clue</span>
+          </div>
+        </div>
       </div>
 
       <button class="btn btn-reveal-answer" id="btn-giveup" disabled>Reveal Answer</button>
@@ -1855,6 +1988,7 @@
 
     // Game initialiser
     function setupPuzzleGame(puzzle) {
+      resetSwipeClues();
       // Check if this puzzle is already completed
       const savedPuz = state.stats.completedPuzzles[puzzle.date];
       
@@ -2793,6 +2927,117 @@
       };
     }
 
+    // Reset swipe slider handles to start position (0px)
+    function resetSwipeClues() {
+      [1, 2].forEach(num => {
+        const thumb = document.querySelector(`#swipe-reveal-hint-${num} .swipe-thumb`);
+        const text = document.querySelector(`#swipe-reveal-hint-${num} .swipe-text`);
+        if (thumb) {
+          thumb.style.transform = 'translateX(0px)';
+          thumb.classList.remove('returning');
+        }
+        if (text) {
+          text.style.opacity = '1';
+        }
+      });
+    }
+
+    // Initialize drag/swipe gesture handlers for mobile-only swipe clue elements
+    function initSwipeClues() {
+      [1, 2].forEach(num => {
+        const container = document.getElementById(`swipe-reveal-hint-${num}`);
+        if (!container) return;
+        
+        const track = container.querySelector('.swipe-track');
+        const thumb = container.querySelector('.swipe-thumb');
+        const text = container.querySelector('.swipe-text');
+        if (!track || !thumb || !text) return;
+        
+        const hintNum = num;
+        
+        let startX = 0;
+        let isDragging = false;
+        let currentDx = 0;
+        
+        const onStart = (e) => {
+          if (state.topSolved && hintNum === 1) return;
+          if (state.bottomSolved && hintNum === 2) return;
+          
+          isDragging = true;
+          thumb.classList.remove('returning');
+          
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          startX = clientX;
+          currentDx = 0;
+          
+          if (e.touches) {
+            e.stopPropagation(); // Avoid scrolling the page while starting a drag swipe
+          }
+          
+          document.addEventListener('touchmove', onMove, { passive: false });
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('touchend', onEnd);
+          document.addEventListener('mouseup', onEnd);
+        };
+        
+        const onMove = (e) => {
+          if (!isDragging) return;
+          
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const dx = clientX - startX;
+          
+          const trackWidth = track.clientWidth;
+          const thumbWidth = thumb.clientWidth;
+          const maxDrag = Math.max(0, trackWidth - thumbWidth - 8); // 8px total margins
+          
+          currentDx = Math.max(0, Math.min(dx, maxDrag));
+          
+          thumb.style.transform = `translateX(${currentDx}px)`;
+          text.style.opacity = Math.max(0, 1 - (currentDx / (maxDrag * 0.75)));
+          
+          if (e.touches) {
+            e.preventDefault(); // Prevent page scrolling during active swipe
+          }
+        };
+        
+        const onEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          
+          document.removeEventListener('touchmove', onMove);
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('touchend', onEnd);
+          document.removeEventListener('mouseup', onEnd);
+          
+          const trackWidth = track.clientWidth;
+          const thumbWidth = thumb.clientWidth;
+          const maxDrag = Math.max(0, trackWidth - thumbWidth - 8);
+          
+          const pct = maxDrag > 0 ? (currentDx / maxDrag) : 0;
+          
+          if (pct >= 0.85) {
+            // Swipe threshold met: lock to end and reveal clue!
+            thumb.style.transform = `translateX(${maxDrag}px)`;
+            revealHint(hintNum);
+          } else {
+            // Under threshold: slide back smoothly to 0px
+            thumb.classList.add('returning');
+            thumb.style.transform = 'translateX(0px)';
+            text.style.opacity = '1';
+            
+            const onTransitionEnd = () => {
+              thumb.classList.remove('returning');
+              thumb.removeEventListener('transitionend', onTransitionEnd);
+            };
+            thumb.addEventListener('transitionend', onTransitionEnd);
+          }
+        };
+        
+        thumb.addEventListener('touchstart', onStart, { passive: false });
+        thumb.addEventListener('mousedown', onStart);
+      });
+    }
+
     // Dynamic visual viewport adjustment to push bottom buttons up when virtual keyboard opens on mobile
     function adjustForVisualViewport() {
       if (!window.visualViewport) return;
@@ -2839,6 +3084,7 @@
     // DOM initializer
     document.addEventListener('DOMContentLoaded', () => {
       adjustForVisualViewport();
+      initSwipeClues();
       setupSettingsHandlers();
       loadStatsAndProgress();
 
@@ -3006,6 +3252,7 @@
       document.getElementById('btn-confirm-clue-cancel').onclick = () => {
         sounds.playClick();
         document.getElementById('modal-confirm-clue').close();
+        resetSwipeClues();
         state.pendingRevealHintNum = null;
       };
 
