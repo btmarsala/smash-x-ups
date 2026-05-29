@@ -1035,29 +1035,7 @@
       background: #1e293b;
     }
 
-    #btn-results-share {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(129, 140, 248, 0.3);
-      background: rgba(129, 140, 248, 0.08);
-      color: var(--primary-accent);
-      cursor: pointer;
-      transition: var(--transition-smooth);
-      margin-top: 10px;
-      outline: none;
-    }
 
-    #btn-results-share:hover {
-      background: var(--primary-accent) !important;
-      color: #ffffff !important;
-      border-color: var(--primary-accent) !important;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
-      transform: scale(1.05);
-    }
 
     .modal-body {
       font-size: 0.95rem;
@@ -1674,10 +1652,7 @@
         <h2 class="modal-title" id="results-modal-title" style="font-size: 1.8rem; font-weight: 800; font-family: var(--font-display); letter-spacing: 0.02em; color: var(--text-dark); text-align: center; width: 100%;">SMA-MAZING!!!</h2>
         <div id="results-hints-revealed" style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: none; margin-top: 4px; text-align: center; width: 100%;">0/2 hints revealed</div>
         <div id="results-completion-time" style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: none; margin-top: 4px; text-align: center; width: 100%;">Time: 00h 00m 00s</div>
-        <button id="btn-results-share" aria-label="Share result">
-          <!-- Share icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-        </button>
+
         <button onclick="document.getElementById('modal-results').close();" aria-label="Close modal" class="modal-close-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
@@ -2833,32 +2808,6 @@
 
       const modal = document.getElementById('modal-results');
       modal.showModal();
-
-      document.getElementById('btn-results-share').onclick = () => {
-        const starText = "⭐".repeat(results.stars) + "▪️".repeat(3 - results.stars);
-        const dayDiff = Math.floor((new Date(results.date) - new Date("2026-05-27")) / 86400000) + 1;
-        const shareText = `🧩 SmashXUps • Day ${dayDiff} 🧩\nConnector: [${state.activePuzzle.connector}]\nRating: ${starText} (${results.stars}/3 Stars)\nTime: ${formatTime(results.timeTaken)}\n\nPlay here: https://smashupsgame.com 💜`;
-        
-        navigator.clipboard.writeText(shareText).then(() => {
-          const shareBtn = document.getElementById('btn-results-share');
-          const originalHtml = shareBtn.innerHTML;
-          const originalBg = shareBtn.style.background;
-          const originalBorder = shareBtn.style.borderColor;
-          const originalColor = shareBtn.style.color;
-
-          shareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-          shareBtn.style.background = "var(--color-correct)";
-          shareBtn.style.borderColor = "var(--color-correct)";
-          shareBtn.style.color = "#ffffff";
-          
-          setTimeout(() => {
-            shareBtn.innerHTML = originalHtml;
-            shareBtn.style.background = originalBg;
-            shareBtn.style.borderColor = originalBorder;
-            shareBtn.style.color = originalColor;
-          }, 2000);
-        });
-      };
 
       // "Play another" button logic to take the user to the most recent unplayed puzzle
       const todayStr = getTodayDateString();
