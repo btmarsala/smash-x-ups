@@ -767,6 +767,7 @@
     .floating-deduction .star-emoji {
       font-size: 1.7rem;
       line-height: 1;
+      color: #fbbf24; /* Gold star matching the results page */
     }
     @keyframes floatDeduction {
       0% {
@@ -1526,7 +1527,7 @@
         <!-- Star deduction indicator above the headline -->
         <div style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 2.2rem; font-weight: 900; color: #ef4444; font-family: var(--font-display); line-height: 1; margin: 4px 0 -4px 0; user-select: none;">
           <span style="display: inline-flex; align-items: center; justify-content: center; line-height: 1;">-1</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-flex; align-items: center; justify-content: center;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span style="color: #fbbf24; font-size: 2.2rem; display: inline-flex; align-items: center; justify-content: center; line-height: 1;">★</span>
         </div>
 
         <p style="font-size: 1.05rem; line-height: 1.5; color: var(--text-main); font-weight: 700; margin: 0;">Heads up: you lose a star for every clue you reveal.</p>
@@ -2252,7 +2253,7 @@
       
       const badge = document.createElement('div');
       badge.className = 'floating-deduction';
-      badge.innerHTML = '<span>-1</span><span class="star-emoji">⭐️</span>';
+      badge.innerHTML = '<span>-1</span><span class="star-emoji">★</span>';
       
       // Position on the right side of the clue box inside the wrapper
       badge.style.right = '24px';
