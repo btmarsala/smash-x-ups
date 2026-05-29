@@ -444,6 +444,22 @@
       color: var(--color-incorrect);
     }
 
+    .blanks-wrapper.revealed-incorrect {
+      background: #fee2e2; /* Soft pink mockup background */
+      border-color: #fca5a5;
+      cursor: default;
+    }
+
+    [data-theme="dark"] .blanks-wrapper.revealed-incorrect {
+      background: rgba(239, 68, 68, 0.15) !important; /* Sleek translucent neon-red in dark mode */
+      border-color: #ef4444 !important;
+    }
+
+    .blanks-wrapper.revealed-incorrect .letter-tile {
+      border-bottom-color: var(--color-incorrect) !important;
+      color: var(--color-incorrect) !important;
+    }
+
     /* Visually mask the inputs entirely: captures typing but sits unseen on top of the card wrapper */
     .text-input {
       position: absolute;
@@ -623,11 +639,11 @@
 
     @media (max-width: 767px) {
       /* Only show swipe container if the wrapper is unsolved and the sibling button does NOT have .revealed class */
-      .blanks-wrapper:not(.correct) .btn-clue:not(.revealed) ~ .swipe-clue-container {
+      .blanks-wrapper:not(.correct):not(.revealed-incorrect) .btn-clue:not(.revealed) ~ .swipe-clue-container {
         display: flex !important;
       }
       /* Hide standard btn-clue when the wrapper is unsolved and the clue is NOT revealed on mobile screen */
-      .blanks-wrapper:not(.correct) .btn-clue:not(.revealed) {
+      .blanks-wrapper:not(.correct):not(.revealed-incorrect) .btn-clue:not(.revealed) {
         display: none !important;
       }
 
@@ -2551,14 +2567,17 @@
       state.bottomSolved = true;
       state.hintsUsed = savedData.stars === 3 ? 0 : savedData.stars === 2 ? 1 : 2;
       
+      const isGaveUp = savedData.gaveUp || (savedData.stars === 0);
+      const wrapperClass = isGaveUp ? 'blanks-wrapper revealed-incorrect' : 'blanks-wrapper correct';
+
       document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
       document.getElementById('top-guess-input').disabled = true;
-      document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
+      document.getElementById('top-wrapper').className = wrapperClass;
       fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
 
       document.getElementById('bottom-guess-input').value = state.activePuzzle.bottom.answer;
       document.getElementById('bottom-guess-input').disabled = true;
-      document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+      document.getElementById('bottom-wrapper').className = wrapperClass;
       fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
 
       // Disable clue buttons and hide the Reveal Answer button entirely
@@ -2677,8 +2696,8 @@
       fillAllTilesCorrectly('top', state.activePuzzle.top.answer);
       fillAllTilesCorrectly('bottom', state.activePuzzle.bottom.answer);
       
-      document.getElementById('top-wrapper').className = 'blanks-wrapper correct';
-      document.getElementById('bottom-wrapper').className = 'blanks-wrapper correct';
+      document.getElementById('top-wrapper').className = 'blanks-wrapper revealed-incorrect';
+      document.getElementById('bottom-wrapper').className = 'blanks-wrapper revealed-incorrect';
       
       document.getElementById('top-guess-input').value = state.activePuzzle.top.answer;
       document.getElementById('top-guess-input').disabled = true;
@@ -2706,7 +2725,8 @@
         solved: true,
         stars: 0,
         timeTaken: timeTaken,
-        date: state.activePuzzle.date
+        date: state.activePuzzle.date,
+        gaveUp: true
       };
       
       state.stats.played++;
