@@ -2176,7 +2176,7 @@
         }
 
         if (state.topSolved && state.bottomSolved) {
-          handleFinalPuzzleSolve();
+          handleFinalPuzzleSolve(position);
         }
       } else {
         const maxLen = answer.toUpperCase().replace(/[^A-Z0-9]/g, '').length;
@@ -2425,7 +2425,7 @@
       }, 800);
     }
 
-    function handleFinalPuzzleSolve() {
+    function handleFinalPuzzleSolve(position) {
       const startTime = state.timeStarted || Date.now();
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       
@@ -2470,9 +2470,15 @@
 
       document.getElementById('btn-giveup').style.display = 'none';
 
+      // Calculate exact animation duration for the final solved section: (tiles - 1) * 50ms + 380ms
+      const solvedContainer = document.getElementById(`${position}-blanks`);
+      const tilesCount = solvedContainer ? Array.from(solvedContainer.querySelectorAll('.letter-tile')).filter(tile => !tile.classList.contains('punctuation')).length : 10;
+      const animDuration = ((tilesCount - 1) * 50) + 380;
+      const popupDelay = animDuration + 1000; // Let animation finish, then wait another second!
+
       setTimeout(() => {
         showResultsModal(puzzleResults);
-      }, 600);
+      }, popupDelay);
     }
 
     function showResultsModal(results) {
