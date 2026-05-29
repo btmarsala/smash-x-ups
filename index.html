@@ -432,6 +432,11 @@
       border-color: #fca5a5;
     }
 
+    [data-theme="dark"] .blanks-wrapper.incorrect {
+      background: rgba(239, 68, 68, 0.15); /* Sleek translucent neon-red in dark mode */
+      border-color: #ef4444;
+    }
+
     .blanks-wrapper.incorrect .letter-tile {
       border-bottom-color: var(--color-incorrect);
       color: var(--color-incorrect);
@@ -2124,12 +2129,34 @@
         if (state.topSolved && state.bottomSolved) {
           handleFinalPuzzleSolve();
         }
-      } else if (isExplicitSubmit) {
-        wrapper.classList.add('incorrect');
-        sounds.playError();
-        setTimeout(() => {
-          wrapper.classList.remove('incorrect');
-        }, 500);
+      } else {
+        const maxLen = answer.toUpperCase().replace(/[^A-Z0-9]/g, '').length;
+        const cleanGuess = userGuess.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        const isFullLength = cleanGuess.length === maxLen;
+
+        if (isFullLength || (isExplicitSubmit && cleanGuess.length > 0)) {
+          wrapper.classList.add('incorrect');
+          sounds.playError();
+          
+          if (isFullLength) {
+            // Block input entries during shake animation to avoid typing race conditions
+            inputEl.readOnly = true;
+            
+            setTimeout(() => {
+              wrapper.classList.remove('incorrect');
+              inputEl.value = '';
+              inputEl.readOnly = false;
+              syncInputToTiles(position, '');
+              updateActiveCursor(position);
+              savePartialProgress();
+            }, 600); // 600ms allows the 500ms CSS shake and red flash to settle fully
+          } else {
+            // Non-full length explicit submission: just show shake without clearing
+            setTimeout(() => {
+              wrapper.classList.remove('incorrect');
+            }, 500);
+          }
+        }
       }
     }
 
