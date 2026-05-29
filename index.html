@@ -2215,6 +2215,7 @@
       if (localStorage.getItem('smash_seen_clue_warning') !== 'true') {
         state.pendingRevealHintNum = hintNum;
         sounds.playClick();
+        localStorage.setItem('smash_seen_clue_warning', 'true');
         document.getElementById('modal-confirm-clue').showModal();
         return;
       }
