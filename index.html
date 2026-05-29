@@ -1475,7 +1475,7 @@
 
         <!-- User Stats Breakdown -->
         <h3 style="font-family: var(--font-display); font-size: 0.95rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Your Lifetime Stats</h3>
-        <div class="stats-grid" id="results-stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="stats-grid" id="results-stats-grid">
           <div class="stat-item">
             <span class="stat-num" id="stats-played">0</span>
             <span class="stat-label">Played</span>
@@ -1491,10 +1491,6 @@
           <div class="stat-item">
             <span class="stat-num" id="stats-stars">0</span>
             <span class="stat-label">Avg Stars</span>
-          </div>
-          <div class="stat-item" style="grid-column: span 2;">
-            <span class="stat-num" id="stats-fastest">--</span>
-            <span class="stat-label">Fastest Time</span>
           </div>
         </div>
 
@@ -2572,19 +2568,6 @@
       document.getElementById('stats-stars').innerHTML = 
         `<span style="line-height: 1; display: inline-flex; align-items: center;">${avg}</span><span style="color: #fbbf24; font-size: 1.2rem; margin-left: 3px; display: inline-flex; align-items: center; line-height: 1;">★</span>`;
 
-      // Calculate fastest time from completed puzzles (stars > 0)
-      let fastest = Infinity;
-      if (state.stats.completedPuzzles) {
-        Object.values(state.stats.completedPuzzles).forEach(puz => {
-          if (puz.solved && puz.stars > 0 && puz.timeTaken !== undefined) {
-            if (puz.timeTaken < fastest) {
-              fastest = puz.timeTaken;
-            }
-          }
-        });
-      }
-      const fastestVal = fastest === Infinity ? '--' : formatTime(fastest);
-      document.getElementById('stats-fastest').innerText = fastestVal;
 
       const modal = document.getElementById('modal-results');
       modal.showModal();
