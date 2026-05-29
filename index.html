@@ -608,6 +608,10 @@
       transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
+    .swipe-thumb.returning ~ .swipe-text {
+      transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
     .swipe-arrow {
       pointer-events: none;
       transition: transform 0.2s;
@@ -2966,13 +2970,23 @@
     }
 
     // Reset swipe slider handles to start position (0px)
-    function resetSwipeClues() {
+    function resetSwipeClues(smooth = false) {
       [1, 2].forEach(num => {
         const thumb = document.querySelector(`#swipe-reveal-hint-${num} .swipe-thumb`);
         const text = document.querySelector(`#swipe-reveal-hint-${num} .swipe-text`);
         if (thumb) {
-          thumb.style.transform = 'translateX(0px)';
-          thumb.classList.remove('returning');
+          if (smooth) {
+            thumb.classList.add('returning');
+            thumb.style.transform = 'translateX(0px)';
+            const onTransitionEnd = () => {
+              thumb.classList.remove('returning');
+              thumb.removeEventListener('transitionend', onTransitionEnd);
+            };
+            thumb.addEventListener('transitionend', onTransitionEnd);
+          } else {
+            thumb.style.transform = 'translateX(0px)';
+            thumb.classList.remove('returning');
+          }
         }
         if (text) {
           text.style.opacity = '1';
@@ -3053,10 +3067,25 @@
           
           const pct = maxDrag > 0 ? (currentDx / maxDrag) : 0;
           
-          if (pct >= 0.85) {
-            // Swipe threshold met: lock to end and reveal clue!
-            thumb.style.transform = `translateX(${maxDrag}px)`;
-            revealHint(hintNum);
+          if (pct >= 0.5) {
+            if (currentDx >= maxDrag - 2) {
+              // Already at the end: reveal immediately
+              thumb.style.transform = `translateX(${maxDrag}px)`;
+              text.style.opacity = '0';
+              revealHint(hintNum);
+            } else {
+              // Swipe threshold met (halfway): slide smoothly all the way across using momentum, then reveal clue!
+              thumb.classList.add('returning');
+              thumb.style.transform = `translateX(${maxDrag}px)`;
+              text.style.opacity = '0';
+              
+              const onRevealTransitionEnd = () => {
+                thumb.classList.remove('returning');
+                thumb.removeEventListener('transitionend', onRevealTransitionEnd);
+                revealHint(hintNum);
+              };
+              thumb.addEventListener('transitionend', onRevealTransitionEnd);
+            }
           } else {
             // Under threshold: slide back smoothly to 0px
             thumb.classList.add('returning');
@@ -3290,7 +3319,7 @@
       document.getElementById('btn-confirm-clue-cancel').onclick = () => {
         sounds.playClick();
         document.getElementById('modal-confirm-clue').close();
-        resetSwipeClues();
+        resetSwipeClues(true);
         state.pendingRevealHintNum = null;
       };
 
