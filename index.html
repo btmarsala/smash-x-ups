@@ -749,7 +749,39 @@
       pointer-events: none;
     }
 
-
+    /* Floating Star Deduction Animation Styles */
+    .floating-deduction {
+      position: absolute;
+      z-index: 1000;
+      pointer-events: none;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      animation: floatDeduction 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      user-select: none;
+    }
+    .floating-deduction .star-emoji {
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+    @keyframes floatDeduction {
+      0% {
+        transform: translate(0, 0) scale(0.6);
+        opacity: 0;
+      }
+      15% {
+        transform: translate(0, -8px) scale(1.15);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(12px, -42px) scale(0.85);
+        opacity: 0;
+      }
+    }
 
     .modal-header {
       display: flex;
@@ -2213,8 +2245,25 @@
       }
     }
 
-    function animateStarDeduction(amount) {
-      // No-op: stars are removed from uncompleted puzzle screens
+    function animateStarDeduction(clueNum) {
+      const wrapperId = clueNum === 1 ? 'top-wrapper' : 'bottom-wrapper';
+      const wrapper = document.getElementById(wrapperId);
+      if (!wrapper) return;
+      
+      const badge = document.createElement('div');
+      badge.className = 'floating-deduction';
+      badge.innerHTML = '<span>-1</span><span class="star-emoji">⭐️</span>';
+      
+      // Position on the right side of the clue box inside the wrapper
+      badge.style.right = '24px';
+      badge.style.bottom = '16px';
+      
+      wrapper.appendChild(badge);
+      
+      // Remove element when animation completes
+      badge.addEventListener('animationend', () => {
+        badge.remove();
+      });
     }
 
     function revealHint(hintNum) {
@@ -2248,7 +2297,7 @@
         h2Btn.innerText = state.activePuzzle.bottom.clue;
         
         // Trigger red minus star pop animation!
-        animateStarDeduction(1);
+        animateStarDeduction(2);
       }
 
       // Update active stars tracker
@@ -2268,6 +2317,10 @@
     }
 
     function surrenderPuzzle() {
+      // Capture unrevealed hint states before they are set to true
+      const hint1NotRevealed = !state.hint1Revealed;
+      const hint2NotRevealed = !state.hint2Revealed;
+
       state.isGaveUp = true;
       state.topSolved = true;
       state.bottomSolved = true;
@@ -2312,9 +2365,13 @@
       
       saveStatsAndProgress();
       
-      // Trigger red minus star pop animation for all remaining active stars!
-      const starsBeforeSurrender = Math.max(1, 3 - state.hintsUsed);
-      animateStarDeduction(starsBeforeSurrender);
+      // Trigger red minus star pop animation for all remaining unrevealed clue boxes!
+      if (hint1NotRevealed) {
+        animateStarDeduction(1);
+      }
+      if (hint2NotRevealed) {
+        animateStarDeduction(2);
+      }
       
       updateActiveStars();
       
