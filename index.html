@@ -1844,6 +1844,13 @@
       }
     }
 
+    function startTimerIfNeeded() {
+      if (!state.timeStarted) {
+        state.timeStarted = Date.now();
+        savePartialProgress();
+      }
+    }
+
     // Game initialiser
     function setupPuzzleGame(puzzle) {
       // Check if this puzzle is already completed
@@ -1861,14 +1868,14 @@
         state.hintsUsed = partial.hintsUsed || 0;
         state.hint1Revealed = partial.hint1Revealed || false;
         state.hint2Revealed = partial.hint2Revealed || false;
-        state.timeStarted = partial.timeStarted || Date.now();
+        state.timeStarted = partial.timeStarted || null;
       } else {
         state.topSolved = false;
         state.bottomSolved = false;
         state.hintsUsed = 0;
         state.hint1Revealed = false;
         state.hint2Revealed = false;
-        state.timeStarted = Date.now();
+        state.timeStarted = null;
       }
       state.isGaveUp = false;
 
@@ -1984,6 +1991,7 @@
 
       // Setup inputs callbacks
       topInput.oninput = (e) => {
+        startTimerIfNeeded();
         const cleanVal = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         if (e.target.value !== cleanVal) {
           e.target.value = cleanVal;
@@ -2000,6 +2008,7 @@
       };
 
       bottomInput.oninput = (e) => {
+        startTimerIfNeeded();
         const cleanVal = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         if (e.target.value !== cleanVal) {
           e.target.value = cleanVal;
@@ -2386,7 +2395,8 @@
       
       sounds.playError();
       
-      const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
+      const startTime = state.timeStarted || Date.now();
+      const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const puzzleResults = {
         solved: true,
         stars: 0,
@@ -2416,7 +2426,8 @@
     }
 
     function handleFinalPuzzleSolve() {
-      const timeTaken = Math.floor((Date.now() - state.timeStarted) / 1000);
+      const startTime = state.timeStarted || Date.now();
+      const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       
       let stars = 3;
       if (state.hintsUsed === 1) stars = 2;
