@@ -626,6 +626,39 @@
       .blanks-wrapper:not(.correct) .btn-clue:not(.revealed) {
         display: none !important;
       }
+
+      /* Compact mobile spacing adjustments to ensure all puzzle gameplay is visible */
+      header {
+        padding: 10px 18px !important;
+      }
+      .game-date-row {
+        margin: 4px 0 10px 0 !important;
+      }
+      .game-stars-row {
+        margin: -16px 0 10px 0 !important;
+      }
+      .blanks-wrapper {
+        padding: 20px 18px 0 18px !important;
+        min-height: 108px !important;
+      }
+      .btn-clue, .swipe-clue-container {
+        margin: 14px -18px 0 -18px !important;
+        width: calc(100% + 36px) !important;
+        min-height: 48px !important;
+        height: 48px !important;
+      }
+      .swipe-thumb {
+        width: 60px !important;
+        height: 40px !important;
+      }
+      .game-connector-row {
+        margin: 10px 0 !important;
+      }
+      .btn-reveal-answer {
+        margin-top: 14px !important;
+        padding: 12px 18px !important;
+        min-height: 46px !important;
+      }
     }
 
     /* Nested Card Clue Button Overrides */
@@ -978,6 +1011,25 @@
     .modal-body {
       font-size: 0.95rem;
       line-height: 1.5;
+      max-height: 55vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 6px;
+    }
+
+    /* Custom subtle scrollbar for scrollable modal bodies */
+    .modal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .modal-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: var(--radius-full);
+    }
+    [data-theme="dark"] .modal-body::-webkit-scrollbar-thumb {
+      background: #475569;
     }
 
     .modal-body p {
@@ -1406,7 +1458,7 @@
     <main class="screen active" id="screen-game">
       
       <!-- Daily Puzzle Date Container with Navigation Arrows -->
-      <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 8px 0 20px 0;">
+      <div class="game-date-row" style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 8px 0 20px 0;">
         <!-- Back Arrow Button (Older puzzles) -->
         <button id="nav-date-back" style="background: transparent; border: none; font-size: 1.3rem; color: #94a3b8; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); width: 32px; height: 32px; border-radius: 50%; outline: none;" aria-label="Previous puzzle">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1422,7 +1474,7 @@
       </div>
 
       <!-- Completed Star Rating Tracker Container -->
-      <div style="position: relative; display: flex; justify-content: center; align-items: center; margin: -12px 0 20px 0; width: 100%;">
+      <div class="game-stars-row" style="position: relative; display: flex; justify-content: center; align-items: center; margin: -12px 0 20px 0; width: 100%;">
         <!-- Star Rating Tracker (Only visible when completed, displays earned stars) -->
         <div id="game-completed-stars" style="display: none; justify-content: center; gap: 4px; font-size: 1.5rem; color: #fbbf24; font-family: var(--font-display); letter-spacing: 0.1em; user-select: none; margin: 0;">★★★</div>
       </div>
@@ -1447,7 +1499,7 @@
       </div>
 
       <!-- Connector Segment -->
-      <div style="margin: 20px 0; display: flex; justify-content: center; align-items: center;">
+      <div class="game-connector-row" style="margin: 20px 0; display: flex; justify-content: center; align-items: center;">
         <div class="connector-text" id="connector-letters">GUY</div>
       </div>
 
