@@ -81,7 +81,7 @@
       display: flex;
       justify-content: center;
       align-items: stretch;
-      overflow-x: hidden;
+      overflow: hidden; /* Prevent double scrollbars & iOS rubber-band bounce on page level */
       transition: var(--transition-smooth);
     }
 
@@ -102,6 +102,8 @@
       border-left: 1px solid #e2e8f0;
       border-right: 1px solid #e2e8f0;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.02);
+      overflow-y: auto; /* Enable vertical scroll containment */
+      -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS Safari */
     }
 
     [data-theme="dark"] #app-container {
@@ -2001,7 +2003,12 @@
         checkGuess('top', false);
         savePartialProgress(); // Save partial characters
       };
-      topInput.onfocus = () => updateActiveCursor('top');
+      topInput.onfocus = () => {
+        updateActiveCursor('top');
+        setTimeout(() => {
+          document.getElementById('top-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 80);
+      };
       topInput.onblur = () => {
         updateActiveCursor('top');
         savePartialProgress();
@@ -2018,7 +2025,12 @@
         checkGuess('bottom', false);
         savePartialProgress(); // Save partial characters
       };
-      bottomInput.onfocus = () => updateActiveCursor('bottom');
+      bottomInput.onfocus = () => {
+        updateActiveCursor('bottom');
+        setTimeout(() => {
+          document.getElementById('bottom-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 80);
+      };
       bottomInput.onblur = () => {
         updateActiveCursor('bottom');
         savePartialProgress();
@@ -2791,12 +2803,36 @@
         if (appContainer) {
           appContainer.style.height = `${vh}px`;
           appContainer.style.minHeight = `${vh}px`;
-          window.scrollTo(0, 0);
         }
       };
 
-      window.visualViewport.addEventListener('resize', updateViewportHeight);
-      window.visualViewport.addEventListener('scroll', updateViewportHeight);
+      const handleResize = () => {
+        updateViewportHeight();
+        
+        // Reset window scroll offset completely to fight off Safari's native layout viewport shifting
+        window.scrollTo(0, 0);
+        
+        // Scroll the active wrapper into view inside our own container
+        const activeInput = document.activeElement;
+        if (activeInput && (activeInput.id === 'top-guess-input' || activeInput.id === 'bottom-guess-input')) {
+          const wrapperId = activeInput.id === 'top-guess-input' ? 'top-wrapper' : 'bottom-wrapper';
+          const wrapper = document.getElementById(wrapperId);
+          if (wrapper) {
+            // Scroll the active wrapper into view to prevent iOS from hiding it behind the keyboard
+            setTimeout(() => {
+              wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 80);
+          }
+        }
+      };
+
+      // Reset any manual/native visual viewport scrolling to lock the outer page layer at 0,0
+      const handleScroll = () => {
+        window.scrollTo(0, 0);
+      };
+
+      window.visualViewport.addEventListener('resize', handleResize);
+      window.visualViewport.addEventListener('scroll', handleScroll);
       updateViewportHeight();
     }
 
