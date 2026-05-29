@@ -1952,7 +1952,11 @@
 
       // Setup inputs callbacks
       topInput.oninput = (e) => {
-        syncInputToTiles('top', e.target.value);
+        const cleanVal = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (e.target.value !== cleanVal) {
+          e.target.value = cleanVal;
+        }
+        syncInputToTiles('top', cleanVal);
         updateActiveCursor('top');
         checkGuess('top', false);
         savePartialProgress(); // Save partial characters
@@ -1964,7 +1968,11 @@
       };
 
       bottomInput.oninput = (e) => {
-        syncInputToTiles('bottom', e.target.value);
+        const cleanVal = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (e.target.value !== cleanVal) {
+          e.target.value = cleanVal;
+        }
+        syncInputToTiles('bottom', cleanVal);
         updateActiveCursor('bottom');
         checkGuess('bottom', false);
         savePartialProgress(); // Save partial characters
