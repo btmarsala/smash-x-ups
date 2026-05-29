@@ -2668,9 +2668,27 @@
 
         if (isCompleted) {
           const starsCount = isCompleted.stars;
+          
+          // Render completion time to the left of the stars
+          const totalSeconds = isCompleted.timeTaken || 0;
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+          const pad = (num) => String(num).padStart(2, '0');
+          
+          const timeSpan = document.createElement('span');
+          timeSpan.style.color = 'var(--text-muted)';
+          timeSpan.style.fontSize = '0.75rem';
+          timeSpan.style.fontWeight = '500';
+          timeSpan.style.marginRight = '8px';
+          timeSpan.style.fontFamily = 'var(--font-main)';
+          timeSpan.innerText = `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+          
           const starsSpan = document.createElement('span');
           starsSpan.className = 'archive-stars';
           starsSpan.innerText = '★'.repeat(starsCount) + '☆'.repeat(3 - starsCount);
+          
+          status.appendChild(timeSpan);
           status.appendChild(starsSpan);
         } else {
           status.innerHTML = `<span style="color: var(--primary-accent); font-weight:600;">Play 🧩</span>`;
